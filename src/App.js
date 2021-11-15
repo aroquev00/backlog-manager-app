@@ -1,36 +1,36 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Routes } from "./modules/general/utils/routes";
 import AppBar from "./modules/navigation/components/AppBar";
-import Tablero from "./modules/tablero/modules/Tablero";
-import RegistrarCliente from "./modules/clientes/registrar/modules/RegistrarCliente";
-import BuscarCliente from "./modules/clientes/buscar/modules/BuscarCliente";
-import CrearPedido from "./modules/pedidos/crear/modules/CrearPedido";
-import BuscarPedido from "./modules/pedidos/buscar/modules/BuscarPedido";
+import Dashboard from "./modules/dashboard/modules/Dashboard";
+import RegisterCustomer from "./modules/customers/register/modules/RegisterCustomer";
+import SearchCustomer from "./modules/customers/search/modules/SearchCustomer";
+import CreateOrder from "./modules/orders/create/modules/CreateOrder";
+import SearchOrder from "./modules/orders/search/modules/SearchOrder";
 
 function App() {
   return (
     <Router>
       <div>
         <Switch>
-          <Route path={Routes.tablero} exact>
+          <Route path={Routes.dashboard} exact>
             <AppBar />
-            <Tablero />
+            <Dashboard />
           </Route>
-          <Route path={Routes.crearPedido} exact>
+          <Route path={Routes.createOrder} exact>
             <AppBar />
-            <CrearPedido />
+            <CreateOrder />
           </Route>
-          <Route path={Routes.buscarPedido} exact>
+          <Route path={Routes.searchOrder} exact>
             <AppBar />
-            <BuscarPedido />
+            <SearchOrder />
           </Route>
-          <Route path={Routes.registrarCliente} exact>
+          <Route path={Routes.registerCustomer} exact>
             <AppBar />
-            <RegistrarCliente />
+            <RegisterCustomer />
           </Route>
-          <Route path={Routes.buscarCliente} exact>
+          <Route path={Routes.searchCustomer} exact>
             <AppBar />
-            <BuscarCliente />
+            <SearchCustomer />
           </Route>
         </Switch>
       </div>

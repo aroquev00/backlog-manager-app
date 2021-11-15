@@ -5,40 +5,40 @@ import { Routes } from "../../general/utils/routes";
 import TabMenu from "./TabMenu";
 
 export default function NavTabs() {
-  const pedidosMenuItems = {
+  const ordersMenuItems = {
     "title": "Pedidos",
     "options": [
       {
         "optionTitle": "Crear nuevo pedido",
-        "optionLink": Routes.crearPedido,
+        "optionLink": Routes.createOrder,
       },
       {
         "optionTitle": "Buscar pedido",
-        "optionLink": Routes.buscarPedido,
+        "optionLink": Routes.searchOrder,
       }
     ]
   }
-  const clientesMenuItems = {
+  const customersMenuItems = {
     "title": "Clientes",
     "options": [
       {
         "optionTitle": "Registrar nuevo cliente",
-        "optionLink": Routes.registrarCliente,
+        "optionLink": Routes.registerCustomer,
       },
       {
         "optionTitle": "Buscar cliente",
-        "optionLink": Routes.buscarCliente,
+        "optionLink": Routes.searchCustomer,
       }
     ]
   }
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Button title="Tablero" href={Routes.tablero} color="primary">
+      <Button title="Tablero" href={Routes.dashboard} color="primary">
         Tablero
       </Button>
-      <TabMenu {...pedidosMenuItems} />
-      <TabMenu {...clientesMenuItems} />
+      <TabMenu {...ordersMenuItems} />
+      <TabMenu {...customersMenuItems} />
     </Box>
   );
 }
