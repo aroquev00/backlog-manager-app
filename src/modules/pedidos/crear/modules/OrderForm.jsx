@@ -4,7 +4,7 @@ import { Container, Typography } from "@mui/material";
 import DesignForm from "./DesignForm";
 import Dialog from "@mui/material/Dialog";
 
-export default function PedidoForm(props) {
+export default function OrderForm(props) {
   const [pedido, setPedido] = useState(props.pedido);
   const [isDesignDialogOpen, setIsDesignDialogOpen] = useState(false);
   const [activeDesign, setActiveDesign] = useState({});

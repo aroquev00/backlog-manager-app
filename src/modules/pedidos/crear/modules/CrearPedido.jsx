@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Container, Typography } from "@mui/material";
-import PedidoForm from './PedidoForm';
+import OrderForm from './OrderForm';
 
 export default function CrearPedido() {
   const emptyPedido = {
@@ -18,7 +18,7 @@ export default function CrearPedido() {
   return (
     <Container maxWidth="lg" style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
       <Typography variant="h3" style={{ margin: '10px' }}> Crear pedido </Typography>
-      <PedidoForm pedido={emptyPedido} />
+      <OrderForm pedido={emptyPedido} />
     </Container>
   );
 }
