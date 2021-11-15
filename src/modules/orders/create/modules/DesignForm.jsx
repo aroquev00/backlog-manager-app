@@ -5,31 +5,29 @@ import Button from '@mui/material/Button';
 import { height } from '@mui/system';
 
 export default function DesignForm(props) {
-  const [marcaPlayera, setMarcaPlayera] = useState(props.design.marcaPlayera);
-  const [sizePlayera, setSizePlayera] = useState(props.design.sizePlayera);
-  const [colorPlayera, setColorPlayera] = useState(props.design.colorPlayera);
-  const [urlImagen, setUrlImagen] = useState(props.design.urlImagen);
+  const [shirtBrand, setShirtBrand] = useState(props.design.shirtBrand);
+  const [shirtSize, setShirtSize] = useState(props.design.shirtSize);
+  const [shirtColor, setShirtColor] = useState(props.design.shirtColor);
+  const [imageUrl, setImageUrl] = useState(props.design.imageUrl);
 
-  const handleSelectImagen = event => {
+  const handleSelectImage = event => {
     if (event.target.files && event.target.files[0]) {
       let img = event.target.files[0];
-      console.log('hm');
       let url = URL.createObjectURL(img);
-      setUrlImagen(url);
-      console.log(url);
+      setImageUrl(url);
     } else {
       console.log("f")
     }
   }
 
   const handleSaveDesign = () => {
-    if (marcaPlayera.length > 0 && sizePlayera.length > 0 && colorPlayera.length > 0 && urlImagen.length > 0) {
+    if (shirtBrand.length > 0 && shirtSize.length > 0 && shirtColor.length > 0 && imageUrl.length > 0) {
       const updatedDesign = {
         id: props.design.id,
-        marcaPlayera: marcaPlayera,
-        sizePlayera: sizePlayera,
-        colorPlayera: colorPlayera,
-        urlImagen: urlImagen,
+        shirtBrand: shirtBrand,
+        shirtSize: shirtSize,
+        shirtColor: shirtColor,
+        imageUrl: imageUrl,
       };
       props.saveDesign(props.index, updatedDesign);
       props.closeDialog();
@@ -42,10 +40,10 @@ export default function DesignForm(props) {
     <Container>
       <h1>Añador diseño</h1>
 
-      <TextField id="marca-playera" label="Marca de la playera" variant="outlined" value={marcaPlayera} onChange={e => setMarcaPlayera(e.target.value)} />
-      <TextField id="size-playera" label="Tamaño de la playera" variant="outlined" value={sizePlayera} onChange={e => setSizePlayera(e.target.value)} />
-      <TextField id="color-playera" label="Color de la playera" variant="outlined" value={colorPlayera} onChange={e => setColorPlayera(e.target.value)} />
-      <p>{urlImagen}</p>
+      <TextField id="shirt-brand" label="Marca de la playera" variant="outlined" value={shirtBrand} onChange={e => setShirtBrand(e.target.value)} />
+      <TextField id="shirt-size" label="Tamaño de la playera" variant="outlined" value={shirtSize} onChange={e => setShirtSize(e.target.value)} />
+      <TextField id="shirt-color" label="Color de la playera" variant="outlined" value={shirtColor} onChange={e => setShirtColor(e.target.value)} />
+      <p>{imageUrl}</p>
       <Button
         variant="contained"
         component="label"
@@ -54,7 +52,7 @@ export default function DesignForm(props) {
         <input
           type="file"
           hidden
-          onChange={handleSelectImagen}
+          onChange={handleSelectImage}
         />
       </Button>
       <div>
@@ -62,7 +60,7 @@ export default function DesignForm(props) {
         <Button variant="contained" onClick={props.closeDialog}>Cancelar diseño</Button>
       </div>
       <div>
-        <img src={urlImagen} style={{ height: '300px' }} />
+        <img src={imageUrl} style={{ height: '300px' }} />
 
       </div>
     </Container>

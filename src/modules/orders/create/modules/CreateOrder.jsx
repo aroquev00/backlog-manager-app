@@ -4,20 +4,20 @@ import OrderForm from './OrderForm';
 export default function CreateOrder() {
   const emptyOrder = {
     id: "",
-    clienteId: "",
+    clientId: "",
     designs: [{
       id: "",
-      marcaPlayera: "",
-      sizePlayera: "",
-      colorPlayera: "",
-      urlImagen: "",
+      shirtBrand: "",
+      shirtSize: "",
+      shirtColor: "",
+      imageUrl: "",
     }],
-    fechaEntrega: "",
+    deliveryDate: "",
   };
   return (
     <Container maxWidth="lg" style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
       <Typography variant="h3" style={{ margin: '10px' }}> Crear pedido </Typography>
-      <OrderForm pedido={emptyOrder} />
+      <OrderForm order={emptyOrder} />
     </Container>
   );
 }
