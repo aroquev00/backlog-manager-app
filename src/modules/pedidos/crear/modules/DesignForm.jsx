@@ -5,7 +5,6 @@ import Button from '@mui/material/Button';
 import { height } from '@mui/system';
 
 export default function DesignForm(props) {
-  console.log(props);
   const [marcaPlayera, setMarcaPlayera] = useState(props.design.marcaPlayera);
   const [sizePlayera, setSizePlayera] = useState(props.design.sizePlayera);
   const [colorPlayera, setColorPlayera] = useState(props.design.colorPlayera);
@@ -23,8 +22,16 @@ export default function DesignForm(props) {
     }
   }
 
-  const handleCloseForm = () => {
+  const handleSaveDesign = () => {
     if (marcaPlayera.length > 0 && sizePlayera.length > 0 && colorPlayera.length > 0 && urlImagen.length > 0) {
+      const updatedDesign = {
+        id: props.design.id,
+        marcaPlayera: marcaPlayera,
+        sizePlayera: sizePlayera,
+        colorPlayera: colorPlayera,
+        urlImagen: urlImagen,
+      };
+      props.saveDesign(props.index, updatedDesign);
       props.closeDialog();
     } else {
       console.log('incomplete data');
@@ -33,7 +40,7 @@ export default function DesignForm(props) {
 
   return (
     <Container>
-      <h1>Add a design</h1>
+      <h1>Añador diseño</h1>
 
       <TextField id="marca-playera" label="Marca de la playera" variant="outlined" value={marcaPlayera} onChange={e => setMarcaPlayera(e.target.value)} />
       <TextField id="size-playera" label="Tamaño de la playera" variant="outlined" value={sizePlayera} onChange={e => setSizePlayera(e.target.value)} />
@@ -50,9 +57,12 @@ export default function DesignForm(props) {
           onChange={handleSelectImagen}
         />
       </Button>
-      <Button variant="contained" onClick={handleCloseForm}>Cerrar forma</Button>
       <div>
-      <img src={urlImagen} style={{height: '300px'}} />
+        <Button variant="contained" onClick={handleSaveDesign}>Guardar diseño</Button>
+        <Button variant="contained" onClick={props.closeDialog}>Cancelar diseño</Button>
+      </div>
+      <div>
+        <img src={urlImagen} style={{ height: '300px' }} />
 
       </div>
     </Container>
