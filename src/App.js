@@ -4,7 +4,7 @@ import AppBar from "./modules/navigation/components/AppBar";
 import Tablero from "./modules/tablero/modules/Tablero";
 import RegistrarCliente from "./modules/clientes/registrar/modules/RegistrarCliente";
 import BuscarCliente from "./modules/clientes/buscar/modules/BuscarCliente";
-import CrearPedido from "./modules/pedidos/crear/modules/CrearPedido";
+import CreateOrder from "./modules/pedidos/crear/modules/CreateOrder";
 import BuscarPedido from "./modules/pedidos/buscar/modules/BuscarPedido";
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
           </Route>
           <Route path={Routes.crearPedido} exact>
             <AppBar />
-            <CrearPedido />
+            <CreateOrder />
           </Route>
           <Route path={Routes.buscarPedido} exact>
             <AppBar />

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Container, Typography } from "@mui/material";
 import OrderForm from './OrderForm';
 
-export default function CrearPedido() {
+export default function CreateOrder() {
   const emptyPedido = {
     id: "",
     clienteId: "",
