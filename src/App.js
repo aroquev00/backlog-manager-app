@@ -5,7 +5,7 @@ import Tablero from "./modules/tablero/modules/Tablero";
 import RegistrarCliente from "./modules/clientes/registrar/modules/RegistrarCliente";
 import BuscarCliente from "./modules/clientes/buscar/modules/BuscarCliente";
 import CreateOrder from "./modules/pedidos/crear/modules/CreateOrder";
-import BuscarPedido from "./modules/pedidos/buscar/modules/BuscarPedido";
+import SearchOrder from "./modules/pedidos/buscar/modules/SearchOrder";
 
 function App() {
   return (
@@ -22,7 +22,7 @@ function App() {
           </Route>
           <Route path={Routes.buscarPedido} exact>
             <AppBar />
-            <BuscarPedido />
+            <SearchOrder />
           </Route>
           <Route path={Routes.registrarCliente} exact>
             <AppBar />
