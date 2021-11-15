@@ -5,7 +5,7 @@ import { Routes } from "../../general/utils/routes";
 import TabMenu from "./TabMenu";
 
 export default function NavTabs() {
-  const pedidosMenuItems = {
+  const ordersMenuItems = {
     "title": "Pedidos",
     "options": [
       {
@@ -18,7 +18,7 @@ export default function NavTabs() {
       }
     ]
   }
-  const clientesMenuItems = {
+  const customersMenuItems = {
     "title": "Clientes",
     "options": [
       {
@@ -37,8 +37,8 @@ export default function NavTabs() {
       <Button title="Tablero" href={Routes.dashboard} color="primary">
         Tablero
       </Button>
-      <TabMenu {...pedidosMenuItems} />
-      <TabMenu {...clientesMenuItems} />
+      <TabMenu {...ordersMenuItems} />
+      <TabMenu {...customersMenuItems} />
     </Box>
   );
 }
