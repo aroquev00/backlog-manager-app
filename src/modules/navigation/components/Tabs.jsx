@@ -10,11 +10,11 @@ export default function NavTabs() {
     "options": [
       {
         "optionTitle": "Crear nuevo pedido",
-        "optionLink": Routes.crearPedido,
+        "optionLink": Routes.createOrder,
       },
       {
         "optionTitle": "Buscar pedido",
-        "optionLink": Routes.buscarPedido,
+        "optionLink": Routes.searchOrder,
       }
     ]
   }
@@ -23,18 +23,18 @@ export default function NavTabs() {
     "options": [
       {
         "optionTitle": "Registrar nuevo cliente",
-        "optionLink": Routes.registrarCliente,
+        "optionLink": Routes.registerCustomer,
       },
       {
         "optionTitle": "Buscar cliente",
-        "optionLink": Routes.buscarCliente,
+        "optionLink": Routes.searchCustomer,
       }
     ]
   }
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Button title="Tablero" href={Routes.tablero} color="primary">
+      <Button title="Tablero" href={Routes.dashboard} color="primary">
         Tablero
       </Button>
       <TabMenu {...pedidosMenuItems} />

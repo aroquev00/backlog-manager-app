@@ -12,23 +12,23 @@ function App() {
     <Router>
       <div>
         <Switch>
-          <Route path={Routes.tablero} exact>
+          <Route path={Routes.dashboard} exact>
             <AppBar />
             <Dashboard />
           </Route>
-          <Route path={Routes.crearPedido} exact>
+          <Route path={Routes.createOrder} exact>
             <AppBar />
             <CreateOrder />
           </Route>
-          <Route path={Routes.buscarPedido} exact>
+          <Route path={Routes.searchOrder} exact>
             <AppBar />
             <SearchOrder />
           </Route>
-          <Route path={Routes.registrarCliente} exact>
+          <Route path={Routes.registerCustomer} exact>
             <AppBar />
             <RegisterCustomer />
           </Route>
-          <Route path={Routes.buscarCliente} exact>
+          <Route path={Routes.searchCustomer} exact>
             <AppBar />
             <SearchCustomer />
           </Route>
