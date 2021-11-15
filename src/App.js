@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Routes } from "./modules/general/utils/routes";
 import AppBar from "./modules/navigation/components/AppBar";
-import Tablero from "./modules/tablero/modules/Tablero";
-import RegistrarCliente from "./modules/clientes/registrar/modules/RegistrarCliente";
-import BuscarCliente from "./modules/clientes/buscar/modules/BuscarCliente";
-import CreateOrder from "./modules/pedidos/crear/modules/CreateOrder";
-import SearchOrder from "./modules/pedidos/buscar/modules/SearchOrder";
+import Dashboard from "./modules/dashboard/modules/Dashboard";
+import RegisterCustomer from "./modules/customers/register/modules/RegisterCustomer";
+import SearchCustomer from "./modules/customers/search/modules/SearchCustomer";
+import CreateOrder from "./modules/orders/create/modules/CreateOrder";
+import SearchOrder from "./modules/orders/search/modules/SearchOrder";
 
 function App() {
   return (
@@ -14,7 +14,7 @@ function App() {
         <Switch>
           <Route path={Routes.tablero} exact>
             <AppBar />
-            <Tablero />
+            <Dashboard />
           </Route>
           <Route path={Routes.crearPedido} exact>
             <AppBar />
@@ -26,11 +26,11 @@ function App() {
           </Route>
           <Route path={Routes.registrarCliente} exact>
             <AppBar />
-            <RegistrarCliente />
+            <RegisterCustomer />
           </Route>
           <Route path={Routes.buscarCliente} exact>
             <AppBar />
-            <BuscarCliente />
+            <SearchCustomer />
           </Route>
         </Switch>
       </div>
