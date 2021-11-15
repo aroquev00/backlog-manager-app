@@ -1,7 +1,7 @@
 import { Container, Typography, Stack, Grid, Card, CardContent, CardActions, TextField, Button } from "@mui/material";
 import React from "react";
 
-export default function BuscarCliente() {
+export default function SearchCustomer() {
   return(
     <Container maxWidth="lg" style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
       <Stack spacing={3} mb={10}>

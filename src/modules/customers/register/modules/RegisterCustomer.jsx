@@ -14,7 +14,7 @@ function crearCliente(cid, nombre, telefono, email) {
 }
 */
 
-export default function RegistrarCliente() {
+export default function RegisterCustomer() {
   return(
       <Container maxWidth="lg" style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
         <Stack spacing={3}>
