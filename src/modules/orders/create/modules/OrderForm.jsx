@@ -75,6 +75,7 @@ export default function OrderForm(props) {
 
   const emptyDesign = {
     id: "",
+    designName: "",
     shirtBrand: "",
     shirtSize: "",
     shirtColor: "",
@@ -83,7 +84,9 @@ export default function OrderForm(props) {
 
   const addEmptyDesign = () => {
     let localOrder = order;
-    localOrder.designs.push(emptyDesign);
+    let localEmptyDesign = emptyDesign;
+    localEmptyDesign.designName = `Diseño ${order.designs.length + 1}`
+    localOrder.designs.push(localEmptyDesign);
     setOrder({ ...localOrder })
   }
 
@@ -119,6 +122,7 @@ export default function OrderForm(props) {
       {order.designs.map((design, index) => {
         return (
           <div key={index}>
+            {design.designName}
             <Button variant="contained" onClick={() => { handleDesignDialogOpen(index, design) }} >Diseño {index + 1}</Button>
             <Button variant="contained" onClick={() => { deleteDesign(index); }}>Eliminar diseño</Button>
           </div>
@@ -130,7 +134,7 @@ export default function OrderForm(props) {
         <LocalizationProvider dateAdapter={DateAdapter}>
           <DesktopDatePicker
             label="Fecha de entrega"
-            inputFormat="MM/dd/yyyy"
+            inputFormat="dd/MM/yyyy"
             value={deliveryDate}
             onChange={(newValue) => { setDeliveryDate(newValue) }}
             renderInput={(params) => <TextField {...params} />}
