@@ -12,7 +12,7 @@ export default function CreateOrder() {
       shirtColor: "",
       imageUrl: "",
     }],
-    deliveryDate: "",
+    deliveryDate: (new Date()).toString(),
   };
   return (
     <Container maxWidth="lg" style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>

@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+import DateAdapter from '@mui/lab/AdapterDateFns';
 import DesignForm from "./DesignForm";
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import Dialog from "@mui/material/Dialog";
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import TextField from '@mui/material/TextField';
 import fire from '../../../../fire';
 
 const emptyCustomer = {
@@ -80,6 +83,8 @@ export default function OrderForm(props) {
     setOrder({ ...localOrder })
   };
 
+  const [deliveryDate, setDeliveryDate] = useState(props.order.deliveryDate);
+
   return (
     <>
       <Autocomplete
@@ -105,6 +110,18 @@ export default function OrderForm(props) {
         );
       })}
       <Button variant="contained" onClick={addEmptyDesign}>Añadir diseño</Button>
+      <br/>
+      <div>
+        <LocalizationProvider dateAdapter={DateAdapter}>
+          <DesktopDatePicker
+            label="Fecha de entrega"
+            inputFormat="MM/dd/yyyy"
+            value={deliveryDate}
+            onChange={(newValue) => { setDeliveryDate(newValue) }}
+            renderInput={(params) => <TextField {...params} />}
+          />
+        </LocalizationProvider>
+      </div>
     </>
   );
 }
