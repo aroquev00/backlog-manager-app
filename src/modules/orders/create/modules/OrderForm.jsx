@@ -17,7 +17,7 @@ const emptyCustomer = {
 export default function OrderForm(props) {
   const [order, setOrder] = useState(props.order);
 
-  const [orderCustomer, setOrderCustomer] = useState(props.order.customerId);
+  const [orderCustomer, setOrderCustomer] = useState(emptyCustomer);
   const [customers, setCustomers] = useState([emptyCustomer]);
 
   const db = fire.firestore();
@@ -30,6 +30,9 @@ export default function OrderForm(props) {
         let customerObject = doc.data();
         customerObject.id = doc.id;
         customerObject.label = `${customerObject.name} - ${customerObject.phone} - ${customerObject.email}`;
+        if (customerObject.id === props.order.customerId) {
+          setOrderCustomer(customerObject);
+        }
         customersArray.push(customerObject);
       });
       setCustomers(customersArray);
