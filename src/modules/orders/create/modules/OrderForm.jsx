@@ -20,6 +20,14 @@ const emptyCustomer = {
 export default function OrderForm(props) {
   const [order, setOrder] = useState(props.order);
 
+  // Order name
+  const handleOrderNameChange = event => {
+    let localOrder = order;
+    localOrder.orderName = event.target.value;
+    setOrder({ ...localOrder })
+  };
+
+  // Order customer
   const [orderCustomer, setOrderCustomer] = useState(emptyCustomer);
   const [customers, setCustomers] = useState([emptyCustomer]);
 
@@ -50,6 +58,7 @@ export default function OrderForm(props) {
     setOrder({ ...localOrder })
   };
 
+  // Designs
   const [isDesignDialogOpen, setIsDesignDialogOpen] = useState(false);
   const [activeDesign, setActiveDesign] = useState({});
   const [activeDesignIndex, setActiveDesignIndex] = useState();
@@ -94,6 +103,7 @@ export default function OrderForm(props) {
 
   return (
     <>
+      <TextField id="order-name" label="Nombre del pedido" variant="outlined" value={order.orderName} onChange={handleOrderNameChange} />
       <Autocomplete
         value={orderCustomer}
         onChange={setNewOrderCustomer}

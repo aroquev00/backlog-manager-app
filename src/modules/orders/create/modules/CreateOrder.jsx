@@ -4,9 +4,11 @@ import OrderForm from './OrderForm';
 export default function CreateOrder() {
   const emptyOrder = {
     id: "",
+    orderName: "Nuevo pedido",
     customerId: "",
     designs: [{
       id: "",
+      designName: "Diseño 1",
       shirtBrand: "",
       shirtSize: "",
       shirtColor: "",
