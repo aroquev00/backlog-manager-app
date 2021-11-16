@@ -43,6 +43,13 @@ export default function OrderForm(props) {
     fetchCustomers();
   }, [])
 
+  const setNewOrderCustomer = (event, newOrderCustomer) => {
+    setOrderCustomer(newOrderCustomer);
+    let localOrder = order;
+    localOrder.customerId = newOrderCustomer.id;
+    setOrder({ ...localOrder })
+  };
+
   const [isDesignDialogOpen, setIsDesignDialogOpen] = useState(false);
   const [activeDesign, setActiveDesign] = useState({});
   const [activeDesignIndex, setActiveDesignIndex] = useState();
@@ -89,9 +96,7 @@ export default function OrderForm(props) {
     <>
       <Autocomplete
         value={orderCustomer}
-        onChange={(event, newValue) => {
-          setOrderCustomer(newValue);
-        }}
+        onChange={setNewOrderCustomer}
         id="combo-box-demo"
         options={customers}
         sx={{ width: 300 }}
