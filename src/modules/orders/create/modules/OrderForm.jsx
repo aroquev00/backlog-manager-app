@@ -1,11 +1,42 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
-import { Container, Typography } from "@mui/material";
+import TextField from '@mui/material/TextField';
 import DesignForm from "./DesignForm";
 import Dialog from "@mui/material/Dialog";
+import fire from '../../../../fire';
+
+const emptyCustomer = {
+  id: "",
+  name: "",
+  phone: "",
+  email: "",
+  label: "",
+};
 
 export default function OrderForm(props) {
   const [order, setOrder] = useState(props.order);
+
+  const [orderCustomer, setOrderCustomer] = useState(props.order.customerId);
+  const [customers, setCustomers] = useState([emptyCustomer]);
+
+  const db = fire.firestore();
+
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      let querySnapshot = await db.collection("customers").get();
+      let customersArray = [];
+      querySnapshot.forEach((doc) => {
+        let customerObject = doc.data();
+        customerObject.id = doc.id;
+        customerObject.label = `${customerObject.name} - ${customerObject.phone} - ${customerObject.email}`;
+        customersArray.push(customerObject);
+      });
+      setCustomers(customersArray);
+    };
+    fetchCustomers();
+  }, [])
+
   const [isDesignDialogOpen, setIsDesignDialogOpen] = useState(false);
   const [activeDesign, setActiveDesign] = useState({});
   const [activeDesignIndex, setActiveDesignIndex] = useState();
@@ -48,6 +79,16 @@ export default function OrderForm(props) {
 
   return (
     <>
+      <Autocomplete
+        value={orderCustomer}
+        onChange={(event, newValue) => {
+          setOrderCustomer(newValue);
+        }}
+        id="combo-box-demo"
+        options={customers}
+        sx={{ width: 300 }}
+        renderInput={(params) => <TextField {...params} label="Cliente" />}
+      />
       <h1>Diseños</h1>
       <Dialog open={isDesignDialogOpen}>
         <DesignForm closeDialog={closeDesignDialog} design={activeDesign} index={activeDesignIndex} saveDesign={saveDesign} />
