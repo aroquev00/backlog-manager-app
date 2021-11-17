@@ -13,6 +13,7 @@ export default function CreateOrder() {
       shirtSize: "",
       shirtColor: "",
       imageUrl: "",
+      comments: "",
     }],
     deliveryDate: (new Date()).toString(),
   };

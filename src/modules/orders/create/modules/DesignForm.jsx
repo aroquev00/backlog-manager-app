@@ -9,6 +9,7 @@ export default function DesignForm(props) {
   const [shirtSize, setShirtSize] = useState(props.design.shirtSize);
   const [shirtColor, setShirtColor] = useState(props.design.shirtColor);
   const [imageUrl, setImageUrl] = useState(props.design.imageUrl);
+  const [comments, setComments] = useState(props.design.comments);
 
   const handleSelectImage = event => {
     if (event.target.files && event.target.files[0]) {
@@ -44,6 +45,7 @@ export default function DesignForm(props) {
       <TextField id="shirt-brand" label="Marca de la playera" variant="outlined" value={shirtBrand} onChange={e => setShirtBrand(e.target.value)} />
       <TextField id="shirt-size" label="Tamaño de la playera" variant="outlined" value={shirtSize} onChange={e => setShirtSize(e.target.value)} />
       <TextField id="shirt-color" label="Color de la playera" variant="outlined" value={shirtColor} onChange={e => setShirtColor(e.target.value)} />
+      <TextField id="design-comments" label="Comentarios" multiline rows={2} value={comments} onChange={e => setComments(e.target.value)} />
       <p>{imageUrl}</p>
       <Button
         variant="contained"

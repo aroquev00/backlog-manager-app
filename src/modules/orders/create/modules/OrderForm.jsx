@@ -80,6 +80,7 @@ export default function OrderForm(props) {
     shirtSize: "",
     shirtColor: "",
     imageUrl: "",
+    comments: "",
   };
 
   const addEmptyDesign = () => {
@@ -102,6 +103,7 @@ export default function OrderForm(props) {
     setOrder({ ...localOrder })
   };
 
+  // Delivery date
   const [deliveryDate, setDeliveryDate] = useState(props.order.deliveryDate);
 
   return (
