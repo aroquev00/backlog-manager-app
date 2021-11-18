@@ -3,17 +3,6 @@ import { Container, Typography, Stack, TextField, Button } from "@mui/material";
 import React from "react";
 import fire from '../../../../fire';
 
-/*
-Quizá así se agregan datos en Firebase?
-function crearCliente(cid, nombre, telefono, email) {
-  firebase.database().ref('clientes/' + cid).push({
-    nombre: nombre,
-    telefono: telefono,
-    email: email
-  });
-}
-*/
-
 export default class RegisterCustomer extends React.Component {
 
  constructor(props) {
