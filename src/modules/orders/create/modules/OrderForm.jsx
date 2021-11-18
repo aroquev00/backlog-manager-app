@@ -3,6 +3,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import DesignForm from "./DesignForm";
+import QuoteForm from "./QuoteForm";
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import Dialog from "@mui/material/Dialog";
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -88,20 +89,39 @@ export default function OrderForm(props) {
     let localEmptyDesign = emptyDesign;
     localEmptyDesign.designName = `Diseño ${order.designs.length + 1}`
     localOrder.designs.push(localEmptyDesign);
+
+    let localEmptyQuoteItem = emptyQuoteItem;
+    localEmptyQuoteItem.description = localEmptyDesign.designName;
+    localOrder.quote.designItems.push(localEmptyQuoteItem);
+
     setOrder({ ...localOrder })
   }
 
   const deleteDesign = (index) => {
     let localOrder = order;
     localOrder.designs.splice(index, 1);
+    localOrder.quote.designItems.splice(index, 1);
     setOrder({ ...localOrder })
   }
 
   const saveDesign = (index, design) => {
     let localOrder = order;
     localOrder.designs[index] = design;
-    setOrder({ ...localOrder })
+    localOrder.quote.designItems[index].description = design.name;
+    setOrder({ ...localOrder });
   };
+
+  // Quote
+  const emptyQuoteItem = {
+    description: "",
+    price: 0,
+  };
+
+  const [isQuoteDialogOpen, setIsQuoteDialogOpen] = useState(false);
+
+  const closeQuoteDialog = () => {
+    setIsQuoteDialogOpen(false);
+  }
 
   // Delivery date
   const [deliveryDate, setDeliveryDate] = useState(props.order.deliveryDate);
@@ -131,7 +151,12 @@ export default function OrderForm(props) {
         );
       })}
       <Button variant="contained" onClick={addEmptyDesign}>Añadir diseño</Button>
-      <br/>
+      <br />
+      <Dialog open={isQuoteDialogOpen} maxWidth="xl">
+        <QuoteForm closeDialog={closeQuoteDialog} quote={{ ...order.quote }} />
+      </Dialog>
+      <Button variant="contained" onClick={() => { setIsQuoteDialogOpen(true) }} >Cotización</Button>
+      {order.quote.designItems.length}
       <div>
         <LocalizationProvider dateAdapter={DateAdapter}>
           <DesktopDatePicker

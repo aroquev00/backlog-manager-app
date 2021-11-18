@@ -15,6 +15,14 @@ export default function CreateOrder() {
       imageUrl: "",
       comments: "",
     }],
+    quote: {
+      designItems: [{
+        description: "Diseño 1",
+        price: 0,
+      }],
+      extraItems: [],
+      total: 0,
+    },
     deliveryDate: (new Date()).toString(),
   };
   return (
