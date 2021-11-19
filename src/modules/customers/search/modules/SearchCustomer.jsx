@@ -57,7 +57,7 @@ export default class SearchCustomer extends React.Component {
                   <Button size="small" onClick={() => {
                     this.setState({
                       editingClient: true,
-                      idToEdit: customerObject.name + ' - ' + customerObject.phone + ' - ' + customerObject.email,
+                      idToEdit: customerObject.id,
                       nameToEdit: customerObject.name,
                       phoneToEdit: customerObject.phone,
                       emailToEdit: customerObject.email

@@ -17,15 +17,14 @@ export default class RegisterCustomer extends React.Component {
   render() {
     const db = fire.firestore();
     
-    const addCustomerToDB = async(name, phone, email) => {
+    const addCustomerToDB = async() => {
       const info = {
+        id: this.state.name + ' - ' + this.state.phone + ' - ' + this.state.email,
         name: this.state.name,
         phone: this.state.phone,
         email: this.state.email
       };
-      console.log('please');
       const res = await db.collection('customers').add(info);
-      console.log('Added document with id ', res.id);
     }
 
     return(
@@ -38,7 +37,7 @@ export default class RegisterCustomer extends React.Component {
           <Button variant="contained" style={{marginTop: '50px'}} size="large" 
                   onClick={() => {
                     if (this.state.name.length > 0 && this.state.phone.length > 0 && this.state.email.length > 0) {
-                      addCustomerToDB(this.state.name, this.state.phone, this.state.email);
+                      addCustomerToDB();
                     } else {
                       console.log('incomplete data');
                     }

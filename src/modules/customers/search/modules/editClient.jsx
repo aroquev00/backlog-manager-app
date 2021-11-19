@@ -32,12 +32,14 @@ export default class EditClient extends React.Component {
                     <Button variant="contained"  style={{marginTop: '20px', marginRight: '10px', marginBottom: '20px'}} onClick={() => {
                             if (this.state.currentName.length > 0 && this.state.currentPhone.length > 0 && this.state.currentEmail.length > 0) {
                                 const info = {
+                                  id: this.state.currentName + ' - ' + this.state.currentPhone + ' - ' + this.state.currentEmail,
                                   name: this.state.currentName,
                                   phone: this.state.currentPhone,
                                   email: this.state.currentEmail
                                 };
           
-                                const res = this.props.database.collection('customers').doc(this.props.idToEdit).set(info);
+                                const res = this.props.database.collection('customers').doc(this.props.idToEdit).delete();
+                                const res2 = this.props.database.collection('customers').add(info);
                               } else {
                                 console.log('incomplete data');
                               }
