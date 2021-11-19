@@ -1,35 +1,44 @@
-import { Container, Typography, Stack, Grid, Card, CardContent, CardActions, TextField, Button } from "@mui/material";
+import { Container, Dialog, Typography, Stack, Grid, Card, CardContent, CardActions, TextField, Button } from "@mui/material";
 import React from "react";
 import fire from '../../../../fire';
+
+import EditClient from "./editClient";
 
 export default class SearchCustomer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       info: "",
-      results: <div />
+      results: <div />,
+      editingClient: false,
+      idToEdit: "",
+      nameToEdit: "",
+      phoneToEdit: "",
+      emailToEdit: ""
     };
   }
 
   render() {
     let customerArray = [];
     let customers = [];
+
     const db = fire.firestore();
+
+    const closeEditDialog = () => {
+      this.setState({editingClient: false})
+    };
 
     const handleSearch = async() => {
       let thing = [];
-      console.log('Inside handleSearch');
       customers = await db.collection('customers').get();
 
       {customers.forEach((doc) => {
         let customerObject = doc.data();
-        console.log('in foreach loop');
+        console.log(customerObject)
 
         if (customerObject.name === this.state.info 
             || customerObject.phone === this.state.info 
             || customerObject.email === this.state.info) {
-              {console.log('got one')}
-
               thing.push(<Grid item xs={3}>
               <Card variant="outlined" sx={{ minWidth: 275 }}>
                 <CardContent>
@@ -45,7 +54,17 @@ export default class SearchCustomer extends React.Component {
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Button size="small">Editar datos</Button>
+                  <Button size="small" onClick={() => {
+                    this.setState({
+                      editingClient: true,
+                      idToEdit: customerObject.name + ' - ' + customerObject.phone + ' - ' + customerObject.email,
+                      nameToEdit: customerObject.name,
+                      phoneToEdit: customerObject.phone,
+                      emailToEdit: customerObject.email
+                    })
+                  }} >
+                    Editar datos
+                  </Button>
                 </CardActions>
               </Card>
             </Grid>);
@@ -69,6 +88,10 @@ export default class SearchCustomer extends React.Component {
         </Stack>
 
         <Grid container spacing={3}>{this.state.results}</Grid>
+        <Dialog open={this.state.editingClient}>
+          <EditClient closeDialog={closeEditDialog} database={db} id={this.state.idToEdit} 
+                      name={this.state.nameToEdit} phone={this.state.phoneToEdit} email={this.state.emailToEdit} />
+        </Dialog>
       </Container>
     );
   }
