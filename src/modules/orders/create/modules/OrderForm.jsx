@@ -19,7 +19,7 @@ const emptyCustomer = {
 };
 
 export default function OrderForm(props) {
-  const [order, setOrder] = useState(props.order);
+  const [order, setOrder] = useState(JSON.parse(JSON.stringify(props.order)));
 
   // Order name
   const handleOrderNameChange = event => {
@@ -134,13 +134,23 @@ export default function OrderForm(props) {
 
   // Save order
   const saveOrder = () => {
-    
+    console.log(order);
+    const id = order.id;
+    let localOrder = order;
+    delete localOrder.id;
+    db.collection("orders").add(localOrder)
+      .then((docRef) => {
+        console.log("Document written with ID: ", docRef.id);
+      })
+      .catch((error) => {
+        console.error("Error adding document: ", error);
+      });
   }
 
   return (
     <>
       <TextField id="order-name" label="Nombre del pedido" variant="outlined" value={order.orderName} onChange={handleOrderNameChange} />
-      <br/>
+      <br />
       <Autocomplete
         value={orderCustomer}
         onChange={setNewOrderCustomer}
@@ -149,7 +159,7 @@ export default function OrderForm(props) {
         sx={{ width: 300 }}
         renderInput={(params) => <TextField {...params} label="Cliente" />}
       />
-      <br/>
+      <br />
       <div>
         <LocalizationProvider dateAdapter={DateAdapter}>
           <DesktopDatePicker
@@ -181,7 +191,7 @@ export default function OrderForm(props) {
       </Dialog>
       <Button variant="contained" onClick={() => { setIsQuoteDialogOpen(true) }} >Cotización</Button>
       <br />
-      <Button variant="contained" onClick={() => {  }} >Guardar pedido</Button>
+      <Button variant="contained" onClick={saveOrder} >Guardar pedido</Button>
     </>
   );
 }
