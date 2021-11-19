@@ -9,9 +9,9 @@ export default class EditClient extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentName: "",
-            currentPhone: "",
-            currentEmail: ""
+            currentName: this.props.name,
+            currentPhone: this.props.phone,
+            currentEmail: this.props.email
         };
     }
 
