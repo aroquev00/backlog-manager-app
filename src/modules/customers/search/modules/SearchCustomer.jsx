@@ -3,20 +3,55 @@ import React from "react";
 import fire from '../../../../fire';
 
 export default class SearchCustomer extends React.Component {
-  
   constructor(props) {
     super(props);
     this.state = {
-      info: ""
+      info: "",
+      results: <div />
     };
   }
 
   render() {
     let customerArray = [];
     let customers = [];
-    const initDB = async() => {
-      const db = fire.firestore();
+    const db = fire.firestore();
+
+    const handleSearch = async() => {
+      let thing = [];
+      console.log('Inside handleSearch');
       customers = await db.collection('customers').get();
+
+      {customers.forEach((doc) => {
+        let customerObject = doc.data();
+        console.log('in foreach loop');
+
+        if (customerObject.name === this.state.info 
+            || customerObject.phone === this.state.info 
+            || customerObject.email === this.state.info) {
+              {console.log('got one')}
+
+              thing.push(<Grid item xs={3}>
+              <Card variant="outlined" sx={{ minWidth: 275 }}>
+                <CardContent>
+                  <Typography variant="h5" component="div">
+                    {customerObject.name}
+                  </Typography>
+                  <br />
+                  <Typography variant="body2">
+                    {customerObject.phone}
+                  </Typography>
+                  <Typography variant="body2">
+                    {customerObject.email}
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  <Button size="small">Editar datos</Button>
+                </CardActions>
+              </Card>
+            </Grid>);
+        }
+      })}
+      this.setState({results: thing})
     }
 
     return(
@@ -27,168 +62,13 @@ export default class SearchCustomer extends React.Component {
           <TextField label="Información del cliente" margin="normal" value={this.state.info}  
                      onChange={e => this.setState({info: e.target.value})} />
           <Button variant="contained" size="large"
-            onClick={() => {
-              customers.forEach((doc) => {
-                let customerObject = doc.data();
-
-                if (customerObject.name === this.state.info 
-                    || customerObject.phone === this.state.info 
-                    || customerObject.email === this.state.info) {
-                      customerArray.push(customerObject);
-                }
-              });
-            }}
+            onClick={handleSearch}
           > 
             Buscar
           </Button>
         </Stack>
 
-        <Grid container spacing={3}>
-          {console.log(customerArray)}
-          {
-            customerArray.map((customer) =>
-              <Grid item xs={3}>
-              <Card variant="outlined" sx={{ minWidth: 275 }}>
-                <CardContent>
-                  <Typography variant="h5" component="div">
-                    {customer.name}
-                  </Typography>
-                  <br />
-                  <Typography variant="body2">
-                    {customer.phone}
-                  </Typography>
-                  <Typography variant="body2">
-                    {customer.email}
-                  </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button size="small">Editar datos</Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            )
-        }
-            
-          <Grid item xs={3}>
-            <Card variant="outlined" sx={{ minWidth: 275 }}>
-              <CardContent>
-                <Typography variant="h5" component="div">
-                  Nombre del cliente
-                </Typography>
-                <br />
-                <Typography variant="body2">
-                  Teléfono del cliente
-                </Typography>
-                <Typography variant="body2">
-                  E-mail del cliente
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Editar datos</Button>
-              </CardActions>
-            </Card>
-          </Grid>
-
-          <Grid item xs={3}>
-            <Card variant="outlined" sx={{ minWidth: 275 }}>
-              <CardContent>
-                <Typography variant="h5" component="div">
-                  Nombre del cliente
-                </Typography>
-                <br />
-                <Typography variant="body2">
-                  Teléfono del cliente
-                </Typography>
-                <Typography variant="body2">
-                  E-mail del cliente
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Editar datos</Button>
-              </CardActions>
-            </Card>
-          </Grid>
-
-          <Grid item xs={3}>
-            <Card variant="outlined" sx={{ minWidth: 275 }}>
-              <CardContent>
-                <Typography variant="h5" component="div">
-                  Nombre del cliente
-                </Typography>
-                <br />
-                <Typography variant="body2">
-                  Teléfono del cliente
-                </Typography>
-                <Typography variant="body2">
-                  E-mail del cliente
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Editar datos</Button>
-              </CardActions>
-            </Card>
-          </Grid>
-
-          <Grid item xs={3}>
-            <Card variant="outlined" sx={{ minWidth: 275 }}>
-              <CardContent>
-                <Typography variant="h5" component="div">
-                  Nombre del cliente
-                </Typography>
-                <br />
-                <Typography variant="body2">
-                  Teléfono del cliente
-                </Typography>
-                <Typography variant="body2">
-                  E-mail del cliente
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Editar datos</Button>
-              </CardActions>
-            </Card>
-          </Grid>
-
-          <Grid item xs={3}>
-            <Card variant="outlined" sx={{ minWidth: 275 }}>
-              <CardContent>
-                <Typography variant="h5" component="div">
-                  Nombre del cliente
-                </Typography>
-                <br />
-                <Typography variant="body2">
-                  Teléfono del cliente
-                </Typography>
-                <Typography variant="body2">
-                  E-mail del cliente
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Editar datos</Button>
-              </CardActions>
-            </Card>
-          </Grid>
-
-          <Grid item xs={3}>
-            <Card variant="outlined" sx={{ minWidth: 275 }}>
-              <CardContent>
-                <Typography variant="h5" component="div">
-                  Nombre del cliente
-                </Typography>
-                <br />
-                <Typography variant="body2">
-                  Teléfono del cliente
-                </Typography>
-                <Typography variant="body2">
-                  E-mail del cliente
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Editar datos</Button>
-              </CardActions>
-            </Card>
-          </Grid>
-        </Grid>
+        <Grid container spacing={3}>{this.state.results}</Grid>
       </Container>
     );
   }
