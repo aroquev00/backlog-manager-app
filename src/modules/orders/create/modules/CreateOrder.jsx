@@ -4,15 +4,26 @@ import OrderForm from './OrderForm';
 export default function CreateOrder() {
   const emptyOrder = {
     id: "",
+    orderName: "Nuevo pedido",
     customerId: "",
     designs: [{
       id: "",
+      designName: "Diseño 1",
       shirtBrand: "",
       shirtSize: "",
       shirtColor: "",
       imageUrl: "",
+      comments: "",
     }],
-    deliveryDate: "",
+    quote: {
+      designItems: [{
+        description: "Diseño 1",
+        price: 0,
+      }],
+      extraItems: [],
+      total: 0,
+    },
+    deliveryDate: (new Date()).toString(),
   };
   return (
     <Container maxWidth="lg" style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
