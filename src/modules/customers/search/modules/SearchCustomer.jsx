@@ -34,6 +34,7 @@ export default class SearchCustomer extends React.Component {
 
       {customers.forEach((doc) => {
         let customerObject = doc.data();
+        customerObject.id = doc.id;
         console.log(customerObject)
 
         if (customerObject.name === this.state.info 
@@ -61,7 +62,9 @@ export default class SearchCustomer extends React.Component {
                       nameToEdit: customerObject.name,
                       phoneToEdit: customerObject.phone,
                       emailToEdit: customerObject.email
-                    })
+                    });
+                    console.log(this.state.idToEdit)
+                    console.log(this.state.nameToEdit)
                   }} >
                     Editar datos
                   </Button>
@@ -89,7 +92,7 @@ export default class SearchCustomer extends React.Component {
 
         <Grid container spacing={3}>{this.state.results}</Grid>
         <Dialog open={this.state.editingClient}>
-          <EditClient closeDialog={closeEditDialog} database={db} id={this.state.idToEdit} 
+          <EditClient closeDialog={closeEditDialog} id={this.state.idToEdit} 
                       name={this.state.nameToEdit} phone={this.state.phoneToEdit} email={this.state.emailToEdit} />
         </Dialog>
       </Container>

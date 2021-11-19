@@ -3,6 +3,7 @@ import { Container, Stack } from '@mui/material';
 import Button from '@mui/material/Button';
 import React from "react";
 import { height } from '@mui/system';
+import fire from '../../../../fire';
 
 export default class EditClient extends React.Component {
     constructor(props) {
@@ -15,6 +16,8 @@ export default class EditClient extends React.Component {
     }
 
     render() {
+        const db = fire.firestore();
+
         return (
             <Container>
                 <h1>Editar cliente</h1>
@@ -32,14 +35,14 @@ export default class EditClient extends React.Component {
                     <Button variant="contained"  style={{marginTop: '20px', marginRight: '10px', marginBottom: '20px'}} onClick={() => {
                             if (this.state.currentName.length > 0 && this.state.currentPhone.length > 0 && this.state.currentEmail.length > 0) {
                                 const info = {
-                                  id: this.state.currentName + ' - ' + this.state.currentPhone + ' - ' + this.state.currentEmail,
                                   name: this.state.currentName,
                                   phone: this.state.currentPhone,
                                   email: this.state.currentEmail
                                 };
           
-                                const res = this.props.database.collection('customers').doc(this.props.idToEdit).delete();
-                                const res2 = this.props.database.collection('customers').add(info);
+                                db.collection('customers').doc(this.props.id).update(info);
+                                //this.props.database.collection('customers').doc(this.props.idToEdit).delete();
+                                //this.props.database.collection('customers').add(info);
                               } else {
                                 console.log('incomplete data');
                               }

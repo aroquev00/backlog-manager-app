@@ -17,14 +17,16 @@ export default class RegisterCustomer extends React.Component {
   render() {
     const db = fire.firestore();
     
-    const addCustomerToDB = async() => {
+    const addCustomerToDB = () => {
       const info = {
-        id: this.state.name + ' - ' + this.state.phone + ' - ' + this.state.email,
         name: this.state.name,
         phone: this.state.phone,
         email: this.state.email
       };
-      const res = await db.collection('customers').add(info);
+      db.collection('customers').add(info)
+                                .then((docRef) => {
+                                  console.log("Customer has ID ", docRef.id)
+                                });
     }
 
     return(
