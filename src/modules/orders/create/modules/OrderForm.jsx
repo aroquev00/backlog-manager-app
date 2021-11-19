@@ -59,6 +59,9 @@ export default function OrderForm(props) {
     setOrder({ ...localOrder })
   };
 
+  // Delivery date
+  const [deliveryDate, setDeliveryDate] = useState(props.order.deliveryDate);
+
   // Designs
   const [isDesignDialogOpen, setIsDesignDialogOpen] = useState(false);
   const [activeDesign, setActiveDesign] = useState({});
@@ -107,7 +110,7 @@ export default function OrderForm(props) {
   const saveDesign = (index, design) => {
     let localOrder = order;
     localOrder.designs[index] = design;
-    localOrder.quote.designItems[index].description = design.name;
+    localOrder.quote.designItems[index].description = design.designName;
     setOrder({ ...localOrder });
   };
 
@@ -123,12 +126,21 @@ export default function OrderForm(props) {
     setIsQuoteDialogOpen(false);
   }
 
-  // Delivery date
-  const [deliveryDate, setDeliveryDate] = useState(props.order.deliveryDate);
+  const saveQuote = quote => {
+    let localOrder = order;
+    localOrder.quote = quote;
+    setOrder({ ...localOrder });
+  };
+
+  // Save order
+  const saveOrder = () => {
+    
+  }
 
   return (
     <>
       <TextField id="order-name" label="Nombre del pedido" variant="outlined" value={order.orderName} onChange={handleOrderNameChange} />
+      <br/>
       <Autocomplete
         value={orderCustomer}
         onChange={setNewOrderCustomer}
@@ -137,6 +149,18 @@ export default function OrderForm(props) {
         sx={{ width: 300 }}
         renderInput={(params) => <TextField {...params} label="Cliente" />}
       />
+      <br/>
+      <div>
+        <LocalizationProvider dateAdapter={DateAdapter}>
+          <DesktopDatePicker
+            label="Fecha de entrega"
+            inputFormat="dd/MM/yyyy"
+            value={deliveryDate}
+            onChange={(newValue) => { setDeliveryDate(newValue) }}
+            renderInput={(params) => <TextField {...params} />}
+          />
+        </LocalizationProvider>
+      </div>
       <h1>Diseños</h1>
       <Dialog open={isDesignDialogOpen}>
         <DesignForm closeDialog={closeDesignDialog} design={activeDesign} index={activeDesignIndex} saveDesign={saveDesign} />
@@ -153,21 +177,11 @@ export default function OrderForm(props) {
       <Button variant="contained" onClick={addEmptyDesign}>Añadir diseño</Button>
       <br />
       <Dialog open={isQuoteDialogOpen} maxWidth="xl">
-        <QuoteForm closeDialog={closeQuoteDialog} quote={{ ...order.quote }} />
+        <QuoteForm closeDialog={closeQuoteDialog} quote={{ ...order.quote }} saveQuote={saveQuote} />
       </Dialog>
       <Button variant="contained" onClick={() => { setIsQuoteDialogOpen(true) }} >Cotización</Button>
-      {order.quote.designItems.length}
-      <div>
-        <LocalizationProvider dateAdapter={DateAdapter}>
-          <DesktopDatePicker
-            label="Fecha de entrega"
-            inputFormat="dd/MM/yyyy"
-            value={deliveryDate}
-            onChange={(newValue) => { setDeliveryDate(newValue) }}
-            renderInput={(params) => <TextField {...params} />}
-          />
-        </LocalizationProvider>
-      </div>
+      <br />
+      <Button variant="contained" onClick={() => {  }} >Guardar pedido</Button>
     </>
   );
 }
