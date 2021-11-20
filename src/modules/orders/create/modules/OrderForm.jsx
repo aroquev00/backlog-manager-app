@@ -21,6 +21,9 @@ const emptyCustomer = {
 export default function OrderForm(props) {
   const [order, setOrder] = useState(JSON.parse(JSON.stringify(props.order)));
 
+  // Edit mode
+  const [editMode, setEditMode] = useState(props.type === "new");
+
   // Order name
   const handleOrderNameChange = event => {
     let localOrder = order;
@@ -49,18 +52,29 @@ export default function OrderForm(props) {
       });
       setCustomers(customersArray);
     };
-    fetchCustomers();
-  }, [])
+    if (editMode) {
+      fetchCustomers();
+    }
+  }, [editMode]);
 
   const setNewOrderCustomer = (event, newOrderCustomer) => {
-    setOrderCustomer(newOrderCustomer);
     let localOrder = order;
-    localOrder.customerId = newOrderCustomer.id;
-    setOrder({ ...localOrder })
+    if (newOrderCustomer != null) {
+      setOrderCustomer(newOrderCustomer);
+      localOrder.customerId = newOrderCustomer.id;
+    } else {
+      setOrderCustomer(emptyCustomer);
+      localOrder.customerId = "";
+    }
+    setOrder({ ...localOrder });
   };
 
   // Delivery date
-  const [deliveryDate, setDeliveryDate] = useState(props.order.deliveryDate);
+  const setNewDeliveryDate = newDeliveryDate => {
+    let localOrder = order;
+    localOrder.deliveryDate = newDeliveryDate.toString();
+    setOrder({ ...localOrder })
+  };
 
   // Designs
   const [isDesignDialogOpen, setIsDesignDialogOpen] = useState(false);
@@ -134,8 +148,6 @@ export default function OrderForm(props) {
 
   // Save order
   const saveOrder = () => {
-    console.log(order);
-    const id = order.id;
     let localOrder = order;
     delete localOrder.id;
     db.collection("orders").add(localOrder)
@@ -147,9 +159,41 @@ export default function OrderForm(props) {
       });
   }
 
+  // Update order
+  const updateOrder = () => {
+    let localOrder = order;
+    const orderId = order.id;
+    delete localOrder.id;
+    db.collection("orders").doc(orderId).update(localOrder)
+      .then(() => {
+        console.log("Document successfully updated!");
+      })
+      .catch((error) => {
+        // The document probably doesn't exist.
+        console.error("Error updating document: ", error);
+      });
+  }
+
+  // Discard order changes
+  const discardOrderChanges = () => {
+    resetCustomer();
+    setOrder(JSON.parse(JSON.stringify(props.order)));
+    setEditMode(false);
+  };
+
+  const resetCustomer = () => {
+    customers.forEach(customer => {
+      if (props.order.customerId === customer.id) {
+        setOrderCustomer(customer);
+        return;
+      }
+    })
+    setOrderCustomer(emptyCustomer);
+  }
+
   return (
     <>
-      <TextField id="order-name" label="Nombre del pedido" variant="outlined" value={order.orderName} onChange={handleOrderNameChange} />
+      <TextField id="order-name" label="Nombre del pedido" variant="outlined" value={order.orderName} onChange={handleOrderNameChange} disabled={!editMode} />
       <br />
       <Autocomplete
         value={orderCustomer}
@@ -158,6 +202,7 @@ export default function OrderForm(props) {
         options={customers}
         sx={{ width: 300 }}
         renderInput={(params) => <TextField {...params} label="Cliente" />}
+        disabled={!editMode}
       />
       <br />
       <div>
@@ -165,9 +210,10 @@ export default function OrderForm(props) {
           <DesktopDatePicker
             label="Fecha de entrega"
             inputFormat="dd/MM/yyyy"
-            value={deliveryDate}
-            onChange={(newValue) => { setDeliveryDate(newValue) }}
+            value={order.deliveryDate}
+            onChange={(newValue) => { setNewDeliveryDate(newValue) }}
             renderInput={(params) => <TextField {...params} />}
+            disabled={!editMode}
           />
         </LocalizationProvider>
       </div>
@@ -180,18 +226,37 @@ export default function OrderForm(props) {
           <div key={index}>
             {design.designName}
             <Button variant="contained" onClick={() => { handleDesignDialogOpen(index, design) }} >Diseño {index + 1}</Button>
-            <Button variant="contained" onClick={() => { deleteDesign(index); }}>Eliminar diseño</Button>
+            {editMode &&
+              (<Button variant="contained" onClick={() => { deleteDesign(index); }}>Eliminar diseño</Button>)
+            }
           </div>
         );
       })}
-      <Button variant="contained" onClick={addEmptyDesign}>Añadir diseño</Button>
+      {editMode &&
+        (<Button variant="contained" onClick={addEmptyDesign}>Añadir diseño</Button>)
+      }
       <br />
       <Dialog open={isQuoteDialogOpen} maxWidth="xl">
         <QuoteForm closeDialog={closeQuoteDialog} quote={{ ...order.quote }} saveQuote={saveQuote} />
       </Dialog>
       <Button variant="contained" onClick={() => { setIsQuoteDialogOpen(true) }} >Cotización</Button>
       <br />
-      <Button variant="contained" onClick={saveOrder} >Guardar pedido</Button>
+      {
+        props.type === "new" ?
+          (<Button variant="contained" onClick={saveOrder} >Guardar pedido</Button>)
+          :
+          (editMode ?
+            (
+              <>
+                <Button variant="contained" onClick={updateOrder} >Actualizar pedido</Button>
+                <Button variant="contained" onClick={discardOrderChanges} >Descartar cambios</Button>
+              </>
+            )
+            :
+            (<Button variant="contained" onClick={() => setEditMode(true)} >Editar pedido</Button>)
+          )
+      }
+
     </>
   );
 }

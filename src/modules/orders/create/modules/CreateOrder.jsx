@@ -28,7 +28,7 @@ export default function CreateOrder() {
   return (
     <Container maxWidth="lg" style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
       <Typography variant="h3" style={{ margin: '10px' }}> Crear pedido </Typography>
-      <OrderForm order={emptyOrder} />
+      <OrderForm order={emptyOrder} type="new" />
     </Container>
   );
 }
