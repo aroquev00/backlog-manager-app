@@ -83,7 +83,7 @@ export default function QuoteForm(props) {
                 <TableCell component="th" scope="row">
                   {designItem.description}
                 </TableCell>
-                <TableCell align="right"><TextField type="number" value={designItem.price} onChange={(e) => { handleDesignPriceUpdate(index, e.target.value) }} /></TableCell>
+                <TableCell align="right"><TextField type="number" value={designItem.price} onChange={(e) => { handleDesignPriceUpdate(index, e.target.value) }} disabled={!props.editMode} /></TableCell>
               </TableRow>
             );
           })}
@@ -95,12 +95,16 @@ export default function QuoteForm(props) {
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    <IconButton aria-label="delete" onClick={() => deleteExtraItem(index)}>
-                      <DeleteIcon />
-                    </IconButton>
-                    <TextField id="item-name" value={extraItem.description} onChange={e => { handleExtraItemDescriptionUpdate(index, e.target.value) }} />
+                    {
+                      props.editMode && (
+                        <IconButton aria-label="delete" onClick={() => deleteExtraItem(index)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      )
+                    }
+                    <TextField id="item-name" value={extraItem.description} onChange={e => { handleExtraItemDescriptionUpdate(index, e.target.value) }} disabled={!props.editMode} />
                   </TableCell>
-                  <TableCell align="right"><TextField type="number" value={extraItem.price} onChange={(e) => { handleExtraItemPriceUpdate(index, e.target.value) }} /></TableCell>
+                  <TableCell align="right"><TextField type="number" value={extraItem.price} onChange={(e) => { handleExtraItemPriceUpdate(index, e.target.value) }} disabled={!props.editMode} /></TableCell>
                 </TableRow>
               );
             })
@@ -118,11 +122,19 @@ export default function QuoteForm(props) {
         </TableBody>
       </Table>
       <div>
-        <Button variant="contained" onClick={addExtraItem}>Añadir concepto extra</Button>
+        {
+          props.editMode && (
+            <Button variant="contained" onClick={addExtraItem}>Añadir concepto extra</Button>
+          )
+        }
       </div>
       <div>
-        <Button variant="contained" onClick={() => { props.saveQuote(quote); props.closeDialog(); }}>Guardar cotización</Button>
-        <Button variant="contained" onClick={() => { props.closeDialog() }}>Salir sin cambios</Button>
+        {
+          props.editMode && (
+            <Button variant="contained" onClick={() => { props.saveQuote(quote); props.closeDialog(); }}>Guardar cotización</Button>
+          )
+        }
+        <Button variant="contained" onClick={() => { props.closeDialog() }}>{props.editMode ? ("Salir sin cambios") : ("Volver")}</Button>
       </div>
     </TableContainer>
   );

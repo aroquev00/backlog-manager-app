@@ -41,26 +41,34 @@ export default function DesignForm(props) {
   return (
     <Container>
       <h1>Añador diseño</h1>
-      <TextField id="design-name" label="Nombre del diseño" variant="outlined" value={designName} onChange={e => setDesignName(e.target.value)} />
-      <TextField id="shirt-brand" label="Marca de la playera" variant="outlined" value={shirtBrand} onChange={e => setShirtBrand(e.target.value)} />
-      <TextField id="shirt-size" label="Tamaño de la playera" variant="outlined" value={shirtSize} onChange={e => setShirtSize(e.target.value)} />
-      <TextField id="shirt-color" label="Color de la playera" variant="outlined" value={shirtColor} onChange={e => setShirtColor(e.target.value)} />
-      <TextField id="design-comments" label="Comentarios" multiline rows={2} value={comments} onChange={e => setComments(e.target.value)} />
+      <TextField id="design-name" label="Nombre del diseño" variant="outlined" value={designName} onChange={e => setDesignName(e.target.value)} disabled={!props.editMode} />
+      <TextField id="shirt-brand" label="Marca de la playera" variant="outlined" value={shirtBrand} onChange={e => setShirtBrand(e.target.value)} disabled={!props.editMode} />
+      <TextField id="shirt-size" label="Tamaño de la playera" variant="outlined" value={shirtSize} onChange={e => setShirtSize(e.target.value)} disabled={!props.editMode} />
+      <TextField id="shirt-color" label="Color de la playera" variant="outlined" value={shirtColor} onChange={e => setShirtColor(e.target.value)} disabled={!props.editMode} />
+      <TextField id="design-comments" label="Comentarios" multiline rows={2} value={comments} onChange={e => setComments(e.target.value)} disabled={!props.editMode} />
       <p>{imageUrl}</p>
-      <Button
-        variant="contained"
-        component="label"
-      >
-        Subir foto
-        <input
-          type="file"
-          hidden
-          onChange={handleSelectImage}
-        />
-      </Button>
+      {
+        props.editMode && (
+          <Button
+            variant="contained"
+            component="label"
+          >
+            Subir foto
+            <input
+              type="file"
+              hidden
+              onChange={handleSelectImage}
+            />
+          </Button>
+        )
+      }
       <div>
-        <Button variant="contained" onClick={handleSaveDesign}>Guardar diseño</Button>
-        <Button variant="contained" onClick={props.closeDialog}>Cancelar diseño</Button>
+        {
+          props.editMode && (
+            <Button variant="contained" onClick={handleSaveDesign}>Guardar diseño</Button>
+          )
+        }
+        <Button variant="contained" onClick={props.closeDialog}>{ props.editMode ? ("Cancelar diseño") : ("Volver")}</Button>
       </div>
       <div>
         <img src={imageUrl} style={{ height: '300px' }} />

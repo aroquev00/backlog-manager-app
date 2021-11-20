@@ -219,7 +219,7 @@ export default function OrderForm(props) {
       </div>
       <h1>Diseños</h1>
       <Dialog open={isDesignDialogOpen}>
-        <DesignForm closeDialog={closeDesignDialog} design={activeDesign} index={activeDesignIndex} saveDesign={saveDesign} />
+        <DesignForm closeDialog={closeDesignDialog} design={activeDesign} index={activeDesignIndex} saveDesign={saveDesign} editMode={editMode} />
       </Dialog>
       {order.designs.map((design, index) => {
         return (
@@ -237,7 +237,7 @@ export default function OrderForm(props) {
       }
       <br />
       <Dialog open={isQuoteDialogOpen} maxWidth="xl">
-        <QuoteForm closeDialog={closeQuoteDialog} quote={{ ...order.quote }} saveQuote={saveQuote} />
+        <QuoteForm closeDialog={closeQuoteDialog} quote={{ ...order.quote }} saveQuote={saveQuote} editMode={editMode} />
       </Dialog>
       <Button variant="contained" onClick={() => { setIsQuoteDialogOpen(true) }} >Cotización</Button>
       <br />
