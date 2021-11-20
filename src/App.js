@@ -6,6 +6,7 @@ import RegisterCustomer from "./modules/customers/register/modules/RegisterCusto
 import SearchCustomer from "./modules/customers/search/modules/SearchCustomer";
 import CreateOrder from "./modules/orders/create/modules/CreateOrder";
 import SearchOrder from "./modules/orders/search/modules/SearchOrder";
+import OrderPage from "./modules/orders/modules/OrderPage";
 
 function App() {
   return (
@@ -23,6 +24,10 @@ function App() {
           <Route path={Routes.searchOrder} exact>
             <AppBar />
             <SearchOrder />
+          </Route>
+          <Route path={Routes.displayOrder}>
+            <AppBar />
+            <OrderPage />
           </Route>
           <Route path={Routes.registerCustomer} exact>
             <AppBar />

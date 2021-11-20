@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import DesignForm from "./DesignForm";
 import QuoteForm from "./QuoteForm";
+import { Routes } from "../../../general/utils/routes";
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import Dialog from "@mui/material/Dialog";
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -20,6 +21,10 @@ const emptyCustomer = {
 
 export default function OrderForm(props) {
   const [order, setOrder] = useState(JSON.parse(JSON.stringify(props.order)));
+
+  useEffect(() => {
+    setOrder(JSON.parse(JSON.stringify(props.order)));
+  }, [props.order])
 
   // Edit mode
   const [editMode, setEditMode] = useState(props.type === "new");
@@ -45,17 +50,16 @@ export default function OrderForm(props) {
         let customerObject = doc.data();
         customerObject.id = doc.id;
         customerObject.label = `${customerObject.name} - ${customerObject.phone} - ${customerObject.email}`;
-        if (customerObject.id === props.order.customerId) {
-          setOrderCustomer(customerObject);
-        }
         customersArray.push(customerObject);
       });
       setCustomers(customersArray);
     };
-    if (editMode) {
-      fetchCustomers();
-    }
-  }, [editMode]);
+    fetchCustomers();
+  }, []);
+
+  useEffect(() => {
+    resetCustomer();
+  }, [props.order])
 
   const setNewOrderCustomer = (event, newOrderCustomer) => {
     let localOrder = order;
@@ -153,6 +157,7 @@ export default function OrderForm(props) {
     db.collection("orders").add(localOrder)
       .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
+        window.location.href = Routes.displayOrder + `/${docRef.id}`;
       })
       .catch((error) => {
         console.error("Error adding document: ", error);
@@ -166,7 +171,7 @@ export default function OrderForm(props) {
     delete localOrder.id;
     db.collection("orders").doc(orderId).update(localOrder)
       .then(() => {
-        console.log("Document successfully updated!");
+        setEditMode(false);
       })
       .catch((error) => {
         // The document probably doesn't exist.
@@ -182,13 +187,14 @@ export default function OrderForm(props) {
   };
 
   const resetCustomer = () => {
+    let foundCustomer = false;
     customers.forEach(customer => {
       if (props.order.customerId === customer.id) {
         setOrderCustomer(customer);
-        return;
+        foundCustomer = true;
       }
     })
-    setOrderCustomer(emptyCustomer);
+    if (!foundCustomer) { setOrderCustomer(emptyCustomer); }
   }
 
   return (
