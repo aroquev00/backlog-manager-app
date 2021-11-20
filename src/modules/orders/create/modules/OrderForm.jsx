@@ -126,6 +126,10 @@ export default function OrderForm(props) {
     localOrder.quote.designItems.push(localEmptyQuoteItem);
 
     setOrder({ ...localOrder })
+
+    let localImageObjects = imageObjects;
+    localImageObjects.push(null);
+    setImageObjects(localImageObjects);
   }
 
   const deleteDesign = (index) => {
@@ -133,6 +137,10 @@ export default function OrderForm(props) {
     localOrder.designs.splice(index, 1);
     localOrder.quote.designItems.splice(index, 1);
     setOrder({ ...localOrder })
+
+    let localImageObjects = imageObjects;
+    localImageObjects.splice(index, 1);
+    setImageObjects(localImageObjects);
   }
 
   const saveDesign = (index, design, imageObject) => {
@@ -173,11 +181,9 @@ export default function OrderForm(props) {
     var metadata = {
       contentType: imageObject.type,
     };
-    
     let imageRef = storageRef.child('images/' + imageName);
     let response = await imageRef.put(imageObject, metadata);
     return response.ref.getDownloadURL();
-    
   };
   //uploadImage("blob:http://localhost:3000/a55c13dc-bf01-4a94-a3e9-0135f070bace");
 

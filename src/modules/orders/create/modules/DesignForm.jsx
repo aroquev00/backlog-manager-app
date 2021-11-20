@@ -32,6 +32,7 @@ export default function DesignForm(props) {
         shirtSize: shirtSize,
         shirtColor: shirtColor,
         imageUrl: imageUrl,
+        comments: comments,
       };
       props.saveDesign(props.index, updatedDesign, imageObject);
       props.closeDialog();
