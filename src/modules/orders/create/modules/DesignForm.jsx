@@ -9,6 +9,7 @@ export default function DesignForm(props) {
   const [shirtSize, setShirtSize] = useState(props.design.shirtSize);
   const [shirtColor, setShirtColor] = useState(props.design.shirtColor);
   const [imageUrl, setImageUrl] = useState(props.design.imageUrl);
+  const [imageObject, setImageObject] =  useState({});
   const [comments, setComments] = useState(props.design.comments);
 
   const handleSelectImage = event => {
@@ -16,6 +17,7 @@ export default function DesignForm(props) {
       let img = event.target.files[0];
       let url = URL.createObjectURL(img);
       setImageUrl(url);
+      setImageObject(img);
     } else {
       console.log("f")
     }
@@ -31,7 +33,7 @@ export default function DesignForm(props) {
         shirtColor: shirtColor,
         imageUrl: imageUrl,
       };
-      props.saveDesign(props.index, updatedDesign);
+      props.saveDesign(props.index, updatedDesign, imageObject);
       props.closeDialog();
     } else {
       console.log('incomplete data');
@@ -58,6 +60,7 @@ export default function DesignForm(props) {
               type="file"
               hidden
               onChange={handleSelectImage}
+              accept="image/*"
             />
           </Button>
         )

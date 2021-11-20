@@ -81,6 +81,16 @@ export default function OrderForm(props) {
   };
 
   // Designs
+  const [imageObjects, setImageObjects] = useState([]);
+
+  const resetImageObjects = () => {
+    setImageObjects(Array(props.order.designs.length).fill(null));
+  }
+
+  useEffect(() => {
+    resetImageObjects();
+  }, [props.order])
+
   const [isDesignDialogOpen, setIsDesignDialogOpen] = useState(false);
   const [activeDesign, setActiveDesign] = useState({});
   const [activeDesignIndex, setActiveDesignIndex] = useState();
@@ -125,11 +135,17 @@ export default function OrderForm(props) {
     setOrder({ ...localOrder })
   }
 
-  const saveDesign = (index, design) => {
+  const saveDesign = (index, design, imageObject) => {
     let localOrder = order;
     localOrder.designs[index] = design;
     localOrder.quote.designItems[index].description = design.designName;
     setOrder({ ...localOrder });
+
+    if (design.imageUrl.includes('localhost')) {
+      let localImageObjects = imageObjects;
+      localImageObjects[index] = imageObject;
+      setImageObjects(localImageObjects);
+    }
   };
 
   // Quote
@@ -150,8 +166,31 @@ export default function OrderForm(props) {
     setOrder({ ...localOrder });
   };
 
+  let storageRef = fire.storage().ref();
+
+  const uploadImage = async (imageLocalUrl, imageObject) => {
+    const imageName = imageObject.name.split('/').at(-1);
+    var metadata = {
+      contentType: imageObject.type,
+    };
+    
+    let imageRef = storageRef.child('images/' + imageName);
+    let response = await imageRef.put(imageObject, metadata);
+    return response.ref.getDownloadURL();
+    
+  };
+  //uploadImage("blob:http://localhost:3000/a55c13dc-bf01-4a94-a3e9-0135f070bace");
+
   // Save order
-  const saveOrder = () => {
+  const saveOrder = async () => {
+    // Upload images
+    let index = 0;
+    for (let design of order.designs) {
+      if (imageObjects[index] !== null) {
+        design.imageUrl = await uploadImage(design.imageUrl, imageObjects[index]);
+      }
+      index += 1;
+    }
     let localOrder = order;
     delete localOrder.id;
     db.collection("orders").add(localOrder)
@@ -165,7 +204,15 @@ export default function OrderForm(props) {
   }
 
   // Update order
-  const updateOrder = () => {
+  const updateOrder = async () => {
+    // Upload images
+    let index = 0;
+    for (let design of order.designs) {
+      if (imageObjects[index] !== null) {
+        design.imageUrl = await uploadImage(design.imageUrl, imageObjects[index]);
+      }
+      index += 1;
+    }
     let localOrder = order;
     const orderId = order.id;
     delete localOrder.id;
@@ -181,6 +228,7 @@ export default function OrderForm(props) {
 
   // Discard order changes
   const discardOrderChanges = () => {
+    resetImageObjects();
     resetCustomer();
     setOrder(JSON.parse(JSON.stringify(props.order)));
     setEditMode(false);
