@@ -9,6 +9,7 @@ export default function DesignForm(props) {
   const [shirtSize, setShirtSize] = useState(props.design.shirtSize);
   const [shirtColor, setShirtColor] = useState(props.design.shirtColor);
   const [imageUrl, setImageUrl] = useState(props.design.imageUrl);
+  const [imageObject, setImageObject] =  useState({});
   const [comments, setComments] = useState(props.design.comments);
 
   const handleSelectImage = event => {
@@ -16,6 +17,7 @@ export default function DesignForm(props) {
       let img = event.target.files[0];
       let url = URL.createObjectURL(img);
       setImageUrl(url);
+      setImageObject(img);
     } else {
       console.log("f")
     }
@@ -30,8 +32,9 @@ export default function DesignForm(props) {
         shirtSize: shirtSize,
         shirtColor: shirtColor,
         imageUrl: imageUrl,
+        comments: comments,
       };
-      props.saveDesign(props.index, updatedDesign);
+      props.saveDesign(props.index, updatedDesign, imageObject);
       props.closeDialog();
     } else {
       console.log('incomplete data');
@@ -41,26 +44,35 @@ export default function DesignForm(props) {
   return (
     <Container>
       <h1>Añador diseño</h1>
-      <TextField id="design-name" label="Nombre del diseño" variant="outlined" value={designName} onChange={e => setDesignName(e.target.value)} />
-      <TextField id="shirt-brand" label="Marca de la playera" variant="outlined" value={shirtBrand} onChange={e => setShirtBrand(e.target.value)} />
-      <TextField id="shirt-size" label="Tamaño de la playera" variant="outlined" value={shirtSize} onChange={e => setShirtSize(e.target.value)} />
-      <TextField id="shirt-color" label="Color de la playera" variant="outlined" value={shirtColor} onChange={e => setShirtColor(e.target.value)} />
-      <TextField id="design-comments" label="Comentarios" multiline rows={2} value={comments} onChange={e => setComments(e.target.value)} />
+      <TextField id="design-name" label="Nombre del diseño" variant="outlined" value={designName} onChange={e => setDesignName(e.target.value)} disabled={!props.editMode} />
+      <TextField id="shirt-brand" label="Marca de la playera" variant="outlined" value={shirtBrand} onChange={e => setShirtBrand(e.target.value)} disabled={!props.editMode} />
+      <TextField id="shirt-size" label="Tamaño de la playera" variant="outlined" value={shirtSize} onChange={e => setShirtSize(e.target.value)} disabled={!props.editMode} />
+      <TextField id="shirt-color" label="Color de la playera" variant="outlined" value={shirtColor} onChange={e => setShirtColor(e.target.value)} disabled={!props.editMode} />
+      <TextField id="design-comments" label="Comentarios" multiline rows={2} value={comments} onChange={e => setComments(e.target.value)} disabled={!props.editMode} />
       <p>{imageUrl}</p>
-      <Button
-        variant="contained"
-        component="label"
-      >
-        Subir foto
-        <input
-          type="file"
-          hidden
-          onChange={handleSelectImage}
-        />
-      </Button>
+      {
+        props.editMode && (
+          <Button
+            variant="contained"
+            component="label"
+          >
+            Subir foto
+            <input
+              type="file"
+              hidden
+              onChange={handleSelectImage}
+              accept="image/*"
+            />
+          </Button>
+        )
+      }
       <div>
-        <Button variant="contained" onClick={handleSaveDesign}>Guardar diseño</Button>
-        <Button variant="contained" onClick={props.closeDialog}>Cancelar diseño</Button>
+        {
+          props.editMode && (
+            <Button variant="contained" onClick={handleSaveDesign}>Guardar diseño</Button>
+          )
+        }
+        <Button variant="contained" onClick={props.closeDialog}>{ props.editMode ? ("Cancelar diseño") : ("Volver")}</Button>
       </div>
       <div>
         <img src={imageUrl} style={{ height: '300px' }} />
