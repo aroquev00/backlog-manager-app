@@ -21,11 +21,6 @@ export default class SearchOrder extends React.Component {
     this.state = {
       info: "",
       results: <div />,
-      editingClient: false,
-      idToEdit: "",
-      nameToEdit: "",
-      phoneToEdit: "",
-      emailToEdit: "",
       buscarPor: "id",
     };
   }
