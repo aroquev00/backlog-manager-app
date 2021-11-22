@@ -9,6 +9,10 @@ import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import Dialog from "@mui/material/Dialog";
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import fire from '../../../../fire';
 
 const emptyCustomer = {
@@ -173,7 +177,24 @@ export default function OrderForm(props) {
     localOrder.quote = quote;
     setOrder({ ...localOrder });
   };
+  
+  // Status
+  const statusOptions = [
+    "Pendiente cotización",
+    "Pendiente confirmación",
+    "Confirmado",
+    "Completado",
+    "Archivado",
+    "Cancelado",
+  ]
 
+  const handleStatusChange = event =>  {
+    let localOrder = order;
+    localOrder.status = event.target.value;
+    setOrder({ ...localOrder });
+  };
+
+  // Save order
   let storageRef = fire.storage().ref();
 
   const uploadImage = async (imageLocalUrl, imageObject) => {
@@ -187,7 +208,6 @@ export default function OrderForm(props) {
   };
   //uploadImage("blob:http://localhost:3000/a55c13dc-bf01-4a94-a3e9-0135f070bace");
 
-  // Save order
   const saveOrder = async () => {
     // Upload images
     let index = 0;
@@ -300,6 +320,24 @@ export default function OrderForm(props) {
         <QuoteForm closeDialog={closeQuoteDialog} quote={{ ...order.quote }} saveQuote={saveQuote} editMode={editMode} />
       </Dialog>
       <Button variant="contained" onClick={() => { setIsQuoteDialogOpen(true) }} >Cotización</Button>
+      <br />
+      <FormControl fullWidth>
+        <InputLabel id="estatus">Estatus</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={order.status}
+          label="Estatus"
+          onChange={handleStatusChange}
+          disabled={!editMode}
+        >
+          {statusOptions.map(option =>  {
+            return (
+              <MenuItem key={option} value={option}>{option}</MenuItem>
+            )
+          })}
+        </Select>
+      </FormControl>
       <br />
       {
         props.type === "new" ?
