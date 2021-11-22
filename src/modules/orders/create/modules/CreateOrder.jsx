@@ -24,6 +24,7 @@ export default function CreateOrder() {
       total: 0,
     },
     deliveryDate: (new Date()).toString(),
+    status: "Pendiente cotización",
   };
   return (
     <Container maxWidth="lg" style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>

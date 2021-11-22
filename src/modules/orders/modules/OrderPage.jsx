@@ -26,6 +26,7 @@ const emptyOrder = {
     total: 0,
   },
   deliveryDate: (new Date()).toString(),
+  status: "Pendiente cotización",
 };
 
 export default function OrderPage() {
