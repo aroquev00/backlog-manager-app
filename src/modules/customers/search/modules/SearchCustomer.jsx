@@ -45,7 +45,6 @@ export default class SearchCustomer extends React.Component {
             <Card variant="outlined" sx={{ minWidth: 275 }}>
               <CardContent>
                 <Typography variant="h5" component="div">
-                  <b>Nombre: </b>
                   {customerObject.name}
                 </Typography>
                 <br />
