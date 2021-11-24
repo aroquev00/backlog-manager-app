@@ -13,7 +13,20 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import fire from '../../../../fire';
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import Stack from "@mui/material/Stack";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { styled } from "@mui/material/styles";
+import { pink } from "@mui/material/colors";
+import fire from "../../../../fire";
 
 const emptyCustomer = {
   id: "",
@@ -28,16 +41,16 @@ export default function OrderForm(props) {
 
   useEffect(() => {
     setOrder(JSON.parse(JSON.stringify(props.order)));
-  }, [props.order])
+  }, [props.order]);
 
   // Edit mode
   const [editMode, setEditMode] = useState(props.type === "new");
 
   // Order name
-  const handleOrderNameChange = event => {
+  const handleOrderNameChange = (event) => {
     let localOrder = order;
     localOrder.orderName = event.target.value;
-    setOrder({ ...localOrder })
+    setOrder({ ...localOrder });
   };
 
   // Order customer
@@ -63,7 +76,7 @@ export default function OrderForm(props) {
 
   useEffect(() => {
     resetCustomer();
-  }, [props.order])
+  }, [props.order]);
 
   const setNewOrderCustomer = (event, newOrderCustomer) => {
     let localOrder = order;
@@ -79,8 +92,16 @@ export default function OrderForm(props) {
     setOrder({ ...localOrder });
   };
 
+  const ColorButton = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(pink[500]),
+    backgroundColor: pink[500],
+    "&:hover": {
+      backgroundColor: pink[700],
+    },
+  }));
+
   // Delivery date
-  const setNewDeliveryDate = newDeliveryDate => {
+  const setNewDeliveryDate = (newDeliveryDate) => {
     let localOrder = order;
     localOrder.deliveryDate = newDeliveryDate != null ? newDeliveryDate.toString() : "";
     setOrder({ ...localOrder })
@@ -91,11 +112,11 @@ export default function OrderForm(props) {
 
   const resetImageObjects = () => {
     setImageObjects(Array(props.order.designs.length).fill(null));
-  }
+  };
 
   useEffect(() => {
     resetImageObjects();
-  }, [props.order])
+  }, [props.order]);
 
   const [isDesignDialogOpen, setIsDesignDialogOpen] = useState(false);
   const [activeDesign, setActiveDesign] = useState({});
@@ -124,30 +145,30 @@ export default function OrderForm(props) {
   const addEmptyDesign = () => {
     let localOrder = order;
     let localEmptyDesign = emptyDesign;
-    localEmptyDesign.designName = `Diseño ${order.designs.length + 1}`
+    localEmptyDesign.designName = `Diseño ${order.designs.length + 1}`;
     localOrder.designs.push(localEmptyDesign);
 
     let localEmptyQuoteItem = emptyQuoteItem;
     localEmptyQuoteItem.description = localEmptyDesign.designName;
     localOrder.quote.designItems.push(localEmptyQuoteItem);
 
-    setOrder({ ...localOrder })
+    setOrder({ ...localOrder });
 
     let localImageObjects = imageObjects;
     localImageObjects.push(null);
     setImageObjects(localImageObjects);
-  }
+  };
 
   const deleteDesign = (index) => {
     let localOrder = order;
     localOrder.designs.splice(index, 1);
     localOrder.quote.designItems.splice(index, 1);
-    setOrder({ ...localOrder })
+    setOrder({ ...localOrder });
 
     let localImageObjects = imageObjects;
     localImageObjects.splice(index, 1);
     setImageObjects(localImageObjects);
-  }
+  };
 
   const saveDesign = (index, design, imageObject) => {
     let localOrder = order;
@@ -155,7 +176,7 @@ export default function OrderForm(props) {
     localOrder.quote.designItems[index].description = design.designName;
     setOrder({ ...localOrder });
 
-    if (design.imageUrl.includes('localhost')) {
+    if (design.imageUrl.includes("localhost")) {
       let localImageObjects = imageObjects;
       localImageObjects[index] = imageObject;
       setImageObjects(localImageObjects);
@@ -172,14 +193,14 @@ export default function OrderForm(props) {
 
   const closeQuoteDialog = () => {
     setIsQuoteDialogOpen(false);
-  }
+  };
 
-  const saveQuote = quote => {
+  const saveQuote = (quote) => {
     let localOrder = order;
     localOrder.quote = quote;
     setOrder({ ...localOrder });
   };
-  
+
   // Status
   const statusOptions = [
     "Pendiente cotización",
@@ -188,9 +209,9 @@ export default function OrderForm(props) {
     "Completado",
     "Archivado",
     "Cancelado",
-  ]
+  ];
 
-  const handleStatusChange = event =>  {
+  const handleStatusChange = (event) => {
     let localOrder = order;
     localOrder.status = event.target.value;
     setOrder({ ...localOrder });
@@ -200,11 +221,11 @@ export default function OrderForm(props) {
   let storageRef = fire.storage().ref();
 
   const uploadImage = async (imageLocalUrl, imageObject) => {
-    const imageName = imageObject.name.split('/').at(-1);
+    const imageName = imageObject.name.split("/").at(-1);
     var metadata = {
       contentType: imageObject.type,
     };
-    let imageRef = storageRef.child('images/' + imageName);
+    let imageRef = storageRef.child("images/" + imageName);
     let response = await imageRef.put(imageObject, metadata);
     return response.ref.getDownloadURL();
   };
@@ -218,13 +239,17 @@ export default function OrderForm(props) {
     let index = 0;
     for (let design of order.designs) {
       if (imageObjects[index] !== null) {
-        design.imageUrl = await uploadImage(design.imageUrl, imageObjects[index]);
+        design.imageUrl = await uploadImage(
+          design.imageUrl,
+          imageObjects[index]
+        );
       }
       index += 1;
     }
     let localOrder = order;
     delete localOrder.id;
-    db.collection("orders").add(localOrder)
+    db.collection("orders")
+      .add(localOrder)
       .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
         window.location.href = Routes.displayOrder + `/${docRef.id}`;
@@ -232,7 +257,7 @@ export default function OrderForm(props) {
       .catch((error) => {
         console.error("Error adding document: ", error);
       });
-  }
+  };
 
   // Update order
   const updateOrder = async () => {
@@ -243,14 +268,19 @@ export default function OrderForm(props) {
     let index = 0;
     for (let design of order.designs) {
       if (imageObjects[index] !== null) {
-        design.imageUrl = await uploadImage(design.imageUrl, imageObjects[index]);
+        design.imageUrl = await uploadImage(
+          design.imageUrl,
+          imageObjects[index]
+        );
       }
       index += 1;
     }
     let localOrder = order;
     const orderId = order.id;
     delete localOrder.id;
-    db.collection("orders").doc(orderId).update(localOrder)
+    db.collection("orders")
+      .doc(orderId)
+      .update(localOrder)
       .then(() => {
         setEditMode(false);
       })
@@ -258,7 +288,7 @@ export default function OrderForm(props) {
         // The document probably doesn't exist.
         console.error("Error updating document: ", error);
       });
-  }
+  };
 
   // Discard order changes
   const discardOrderChanges = () => {
@@ -270,14 +300,16 @@ export default function OrderForm(props) {
 
   const resetCustomer = () => {
     let foundCustomer = false;
-    customers.forEach(customer => {
+    customers.forEach((customer) => {
       if (props.order.customerId === customer.id) {
         setOrderCustomer(customer);
         foundCustomer = true;
       }
-    })
-    if (!foundCustomer) { setOrderCustomer(emptyCustomer); }
-  }
+    });
+    if (!foundCustomer) {
+      setOrderCustomer(emptyCustomer);
+    }
+  };
 
   const validateOrderData = () => {
     if (order.orderName.length === 0) {
@@ -300,7 +332,14 @@ export default function OrderForm(props) {
 
   return (
     <>
-      <TextField id="order-name" label="Nombre del pedido" variant="outlined" value={order.orderName} onChange={handleOrderNameChange} disabled={!editMode} />
+      <TextField
+        id="order-name"
+        label="Nombre del pedido"
+        variant="outlined"
+        value={order.orderName}
+        onChange={handleOrderNameChange}
+        disabled={!editMode}
+      />
       <br />
       <Autocomplete
         value={orderCustomer}
@@ -318,7 +357,9 @@ export default function OrderForm(props) {
             label="Fecha de entrega"
             inputFormat="dd/MM/yyyy"
             value={order.deliveryDate}
-            onChange={(newValue) => { setNewDeliveryDate(newValue) }}
+            onChange={(newValue) => {
+              setNewDeliveryDate(newValue);
+            }}
             renderInput={(params) => <TextField {...params} />}
             disabled={!editMode}
           />
@@ -326,27 +367,94 @@ export default function OrderForm(props) {
       </div>
       <h1>Diseños</h1>
       <Dialog open={isDesignDialogOpen}>
-        <DesignForm closeDialog={closeDesignDialog} design={activeDesign} index={activeDesignIndex} saveDesign={saveDesign} editMode={editMode} />
+        <DesignForm
+          closeDialog={closeDesignDialog}
+          design={activeDesign}
+          index={activeDesignIndex}
+          saveDesign={saveDesign}
+          editMode={editMode}
+        />
       </Dialog>
-      {order.designs.map((design, index) => {
-        return (
-          <div key={index}>
-            {design.designName}
-            <Button variant="contained" onClick={() => { handleDesignDialogOpen(index, design) }} >Diseño {index + 1}</Button>
-            {editMode &&
-              (<Button variant="contained" onClick={() => { deleteDesign(index); }}>Eliminar diseño</Button>)
-            }
-          </div>
-        );
-      })}
-      {editMode &&
-        (<Button variant="contained" onClick={addEmptyDesign}>Añadir diseño</Button>)
-      }
+
+      <TableContainer sx={{ maxWidth: 900 }} component={Paper}>
+        <Table sx={{ minWidth: 450 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Nombre</TableCell>
+              <TableCell align="left">Editar</TableCell>
+              <TableCell align="left">Eliminar</TableCell>
+              <TableCell align="right">
+                {editMode && (
+                  <ColorButton
+                    variant="contained"
+                    endIcon={<AddIcon />}
+                    onClick={addEmptyDesign}
+                  >
+                    Crear diseño
+                  </ColorButton>
+                )}
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {order.designs.map((design, index) => {
+              return (
+                <TableRow
+                  key={index}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {design.designName}
+                  </TableCell>
+                  <TableCell align="left">
+                    <Button
+                      variant="outlined"
+                      endIcon={<EditIcon />}
+                      onClick={() => {
+                        handleDesignDialogOpen(index, design);
+                      }}
+                    >
+                      Editar
+                    </Button>
+                  </TableCell>
+                  <TableCell align="left">
+                    {editMode && (
+                      <Button
+                        variant="outlined"
+                        endIcon={<DeleteIcon />}
+                        onClick={() => {
+                          deleteDesign(index);
+                        }}
+                      >
+                        Eliminar
+                      </Button>
+                    )}
+                  </TableCell>
+                  <TableCell></TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
       <br />
       <Dialog open={isQuoteDialogOpen} maxWidth="xl">
-        <QuoteForm closeDialog={closeQuoteDialog} quote={{ ...order.quote }} saveQuote={saveQuote} editMode={editMode} />
+        <QuoteForm
+          closeDialog={closeQuoteDialog}
+          quote={{ ...order.quote }}
+          saveQuote={saveQuote}
+          editMode={editMode}
+        />
       </Dialog>
-      <Button variant="contained" onClick={() => { setIsQuoteDialogOpen(true) }} >Cotización</Button>
+      <Button
+        variant="contained"
+        onClick={() => {
+          setIsQuoteDialogOpen(true);
+        }}
+      >
+        Cotización
+      </Button>
       <br />
       <FormControl fullWidth>
         <InputLabel id="estatus">Estatus</InputLabel>
@@ -358,30 +466,36 @@ export default function OrderForm(props) {
           onChange={handleStatusChange}
           disabled={!editMode}
         >
-          {statusOptions.map(option =>  {
+          {statusOptions.map((option) => {
             return (
-              <MenuItem key={option} value={option}>{option}</MenuItem>
-            )
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            );
           })}
         </Select>
       </FormControl>
       <br />
-      {
-        props.type === "new" ?
-          (<Button variant="contained" onClick={saveOrder} >Guardar pedido</Button>)
-          :
-          (editMode ?
-            (
-              <>
-                <Button variant="contained" onClick={updateOrder} >Actualizar pedido</Button>
-                <Button variant="contained" onClick={discardOrderChanges} >Descartar cambios</Button>
-              </>
-            )
-            :
-            (<Button variant="contained" onClick={() => setEditMode(true)} >Editar pedido</Button>)
-          )
-      }
-
+      <Stack spacing={2} direction="row">
+        {props.type === "new" ? (
+          <Button variant="contained" onClick={saveOrder}>
+            Guardar pedido
+          </Button>
+        ) : editMode ? (
+          <>
+            <Button variant="contained" onClick={updateOrder}>
+              Actualizar pedido
+            </Button>
+            <Button variant="contained" onClick={discardOrderChanges}>
+              Descartar cambios
+            </Button>
+          </>
+        ) : (
+          <Button variant="contained" onClick={() => setEditMode(true)}>
+            Editar pedido
+          </Button>
+        )}
+      </Stack>
     </>
   );
 }
