@@ -328,6 +328,7 @@ export default function OrderForm(props) {
       window.alert('El pedido debe tener al menos un diseño');
       return false;
     }
+    return true;
   }
 
   return (
