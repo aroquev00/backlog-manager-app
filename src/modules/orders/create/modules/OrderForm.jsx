@@ -70,9 +70,11 @@ export default function OrderForm(props) {
     if (newOrderCustomer != null) {
       setOrderCustomer(newOrderCustomer);
       localOrder.customerId = newOrderCustomer.id;
+      localOrder.customerName = newOrderCustomer.name;
     } else {
       setOrderCustomer(emptyCustomer);
       localOrder.customerId = "";
+      localOrder.customerName = "";
     }
     setOrder({ ...localOrder });
   };
@@ -80,7 +82,7 @@ export default function OrderForm(props) {
   // Delivery date
   const setNewDeliveryDate = newDeliveryDate => {
     let localOrder = order;
-    localOrder.deliveryDate = newDeliveryDate.toString();
+    localOrder.deliveryDate = newDeliveryDate != null ? newDeliveryDate.toString() : "";
     setOrder({ ...localOrder })
   };
 
@@ -209,6 +211,9 @@ export default function OrderForm(props) {
   //uploadImage("blob:http://localhost:3000/a55c13dc-bf01-4a94-a3e9-0135f070bace");
 
   const saveOrder = async () => {
+    if (!validateOrderData()) {
+      return;
+    }
     // Upload images
     let index = 0;
     for (let design of order.designs) {
@@ -231,6 +236,9 @@ export default function OrderForm(props) {
 
   // Update order
   const updateOrder = async () => {
+    if (!validateOrderData()) {
+      return;
+    }
     // Upload images
     let index = 0;
     for (let design of order.designs) {
@@ -269,6 +277,25 @@ export default function OrderForm(props) {
       }
     })
     if (!foundCustomer) { setOrderCustomer(emptyCustomer); }
+  }
+
+  const validateOrderData = () => {
+    if (order.orderName.length === 0) {
+      window.alert('Llenar el campo de nombre de pedido');
+      return false;
+    }
+    if (order.customerId === "") {
+      window.alert('Elegir un cliente para el pedido');
+      return false;
+    }
+    if (order.deliveryDate === "Invalid Date" || order.deliveryDate === "") {
+      window.alert('Llenar el campo de fecha de entrega con fecha válida');
+      return false;
+    }
+    if (order.designs.length === 0) {
+      window.alert('El pedido debe tener al menos un diseño');
+      return false;
+    }
   }
 
   return (

@@ -6,6 +6,7 @@ export default function CreateOrder() {
     id: "",
     orderName: "Nuevo pedido",
     customerId: "",
+    customerName: "",
     designs: [{
       id: "",
       designName: "Diseño 1",
