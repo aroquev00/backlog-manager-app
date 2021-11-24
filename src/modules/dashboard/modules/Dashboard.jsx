@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import fire from "../../../fire";
 import { DataGrid } from '@mui/x-data-grid';
 import { useHistory } from "react-router";
+import { Routes } from "../../general/utils/routes";
 
 export default function Dashboard() {
 
@@ -54,7 +55,7 @@ export default function Dashboard() {
       sortable: false,
       renderCell: (params) => {
         const onClick = (e) => {
-          history.push(`orders/${params.id}`);
+          history.push(Routes.displayOrder + `/${params.id}`);
         };
         return <Button variant="contained" onClick={onClick}>Detalles</Button>;
       },
