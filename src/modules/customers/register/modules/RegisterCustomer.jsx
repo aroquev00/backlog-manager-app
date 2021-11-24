@@ -1,4 +1,3 @@
-import { ConstructionRounded } from "@mui/icons-material";
 import { Container, Typography, Stack, TextField, Button } from "@mui/material";
 import React from "react";
 import fire from '../../../../fire';
@@ -41,7 +40,7 @@ export default class RegisterCustomer extends React.Component {
                     if (this.state.name.length > 0 && this.state.phone.length > 0 && this.state.email.length > 0) {
                       addCustomerToDB();
                     } else {
-                      console.log('incomplete data');
+                      window.alert("Ningún campo puede quedar incompleto");
                     }
                   }}> 
             Registrar
