@@ -8,6 +8,7 @@ const emptyOrder = {
   id: "",
   orderName: "Nuevo pedido",
   customerId: "",
+  customerName: "",
   designs: [{
     id: "",
     designName: "Diseño 1",

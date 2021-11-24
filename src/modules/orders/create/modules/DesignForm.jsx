@@ -26,26 +26,37 @@ export default function DesignForm(props) {
   };
 
   const handleSaveDesign = () => {
-    if (
-      shirtBrand.length > 0 &&
-      shirtSize.length > 0 &&
-      shirtColor.length > 0 &&
-      imageUrl.length > 0
-    ) {
-      const updatedDesign = {
-        id: props.design.id,
-        designName: designName,
-        shirtBrand: shirtBrand,
-        shirtSize: shirtSize,
-        shirtColor: shirtColor,
-        imageUrl: imageUrl,
-        comments: comments,
-      };
-      props.saveDesign(props.index, updatedDesign, imageObject);
-      props.closeDialog();
-    } else {
-      console.log("incomplete data");
+    if (designName.length === 0) {
+      window.alert('Llenar el nombre del diseño');
+      return;
     }
+    if (shirtBrand.length === 0) {
+      window.alert('Llenar la marca de la playera');
+      return;
+    }
+    if (shirtSize.length === 0) {
+      window.alert('Llenar el tamaño de la playera');
+      return;
+    }
+    if (shirtColor.length === 0) {
+      window.alert('Llenar el color de la playera');
+      return;
+    }
+    if (imageUrl.length === 0) {
+      window.alert('Subir una imagen del diseño');
+      return;
+    }
+    const updatedDesign = {
+      id: props.design.id,
+      designName: designName,
+      shirtBrand: shirtBrand,
+      shirtSize: shirtSize,
+      shirtColor: shirtColor,
+      imageUrl: imageUrl,
+      comments: comments,
+    };
+    props.saveDesign(props.index, updatedDesign, imageObject);
+    props.closeDialog();
   };
 
   return (

@@ -12,7 +12,18 @@ export default function Dashboard() {
   const [orders, setOrders] = useState([]);
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 200, sortable: false},
+    {
+      field: 'orderName',
+      headerName: 'Nombre en la Orden',
+      width: 200,
+      sortable: false,
+    },
+    {
+      field: 'customerName',
+      headerName: 'Cliente de la Orden',
+      width: 200,
+      sortable: false,
+    },
     {
       field: 'status',
       headerName: 'Estatus',
@@ -21,19 +32,13 @@ export default function Dashboard() {
     },
     {
       field: 'date',
-      headerName: 'Fecha de Entrega',
-      width: 200,
+      headerName: 'Fecha Entrega',
+      width: 150,
       sortable: false,
       valueGetter: (params) => {
         let date = new Date(params.row.deliveryDate);
         return date.toLocaleDateString("es-MX");
       },
-    },
-    {
-      field: 'orderName',
-      headerName: 'Nombre en la Orden',
-      width: 200,
-      sortable: false,
     },
     {
       field: 'total',
@@ -44,8 +49,8 @@ export default function Dashboard() {
     },
     {
       field: 'items',
-      headerName: 'Numero de diseños',
-      width: 180,
+      headerName: 'Num diseños',
+      width: 150,
       sortable: false,
       valueGetter: (params) => `${params.row.designs.length}`,
     },

@@ -8,11 +8,13 @@ import {
   Stack,
   Grid,
   Card,
+  CardActions,
   CardContent,
   TextField,
   Button,
 } from "@mui/material";
 import React from "react";
+import { Routes } from "../../../general/utils/routes";
 import fire from "../../../../fire";
 
 export default class SearchOrder extends React.Component {
@@ -26,6 +28,7 @@ export default class SearchOrder extends React.Component {
   }
 
   render() {
+
     const handleSelectChange = (event) => {
       this.setState({ buscarPor: event.target.value });
     };
@@ -39,49 +42,62 @@ export default class SearchOrder extends React.Component {
       let cardsGrid = [];
       orders = await db.collection("orders").get();
 
-      {
-        orders.forEach((doc) => {
-          let orderObject = doc.data();
-          orderObject.id = doc.id;
-          let search = this.state.info.toLowerCase();
-          console.log(search);
 
-          if (
-            (this.state.buscarPor == "id" &&
-              orderObject.id &&
-              orderObject.id.toString().toLowerCase().includes(search)) ||
-            (this.state.buscarPor == "nombrePedido" &&
-              orderObject.orderName &&
-              orderObject.orderName
-                .toString()
-                .toLowerCase()
-                .includes(search)) ||
-            (this.state.buscarPor == "idCliente" &&
-              orderObject.customerId &&
-              orderObject.customerId.toString().toLowerCase().includes(search))
-          ) {
-            console.log("order", orderObject);
-            cardsGrid.push(
-              <Grid item xs={3}>
-                <Card variant="outlined" sx={{ minWidth: 340, minHeight: 160 }}>
-                  <CardContent>
-                    <Typography variant="h5" component="div">
-                      <b>ID:</b> {orderObject.id}
-                    </Typography>
-                    <br />
-                    <Typography variant="body2">
-                      <b>Name:</b> {orderObject.orderName}
-                    </Typography>
-                    <Typography variant="body2">
-                      <b>Customer ID:</b> {orderObject.customerId}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            );
-          }
-        });
-      }
+      orders.forEach((doc) => {
+        let orderObject = doc.data();
+        orderObject.id = doc.id;
+        let search = this.state.info.toLowerCase();
+        console.log(search);
+
+        if (
+          (this.state.buscarPor === "id" &&
+            orderObject.id &&
+            orderObject.id.toString().toLowerCase().includes(search)) ||
+          (this.state.buscarPor === "nombrePedido" &&
+            orderObject.orderName &&
+            orderObject.orderName.toString().toLowerCase().includes(search)) ||
+          (this.state.buscarPor === "status" &&
+            orderObject.status &&
+            orderObject.status.toString().toLowerCase().includes(search)) ||
+          (this.state.buscarPor === "idCliente" &&
+            orderObject.customerId &&
+            orderObject.customerId.toString().toLowerCase().includes(search)) ||
+          (this.state.buscarPor === "nombreCliente" &&
+            orderObject.customerName &&
+            orderObject.customerName.toString().toLowerCase().includes(search))
+        ) {
+          console.log("order", orderObject);
+          cardsGrid.push(
+            <Grid key={orderObject.id} item xs={3}>
+              <Card variant="outlined" sx={{ minHeight: 160 }}>
+                <CardContent>
+                  <Typography variant="h5">
+                    {orderObject.orderName}
+                  </Typography>
+                  <Typography variant="h5" component="div">
+                    <b>Cliente: </b> {orderObject.customerName}
+                  </Typography>
+                  <br />
+                  <Typography variant="body2">
+                    <b>Fecha de entrega:</b> {orderObject.deliveryDate}
+                  </Typography>
+                  <Typography variant="body2">
+                    <b>Estatus:</b> {orderObject.status}
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  <a href={Routes.displayOrder + `/${orderObject.id}`}>
+                    <div>
+                      <Button size="small" >Ver pedido</Button>
+                    </div>
+                  </a>
+                </CardActions>
+              </Card>
+            </Grid>
+          );
+        }
+      });
+
       this.setState({ results: cardsGrid });
     };
 
@@ -108,9 +124,11 @@ export default class SearchOrder extends React.Component {
               label="Buscar por "
               onChange={handleSelectChange}
             >
-              <MenuItem value={"id"}>ID</MenuItem>
+              <MenuItem value={"id"}>ID de Pedido</MenuItem>
               <MenuItem value={"nombrePedido"}>Nombre de Pedido</MenuItem>
+              <MenuItem value={"status"}>Estatus de Pedido</MenuItem>
               <MenuItem value={"idCliente"}>ID del cliente</MenuItem>
+              <MenuItem value={"nombreCliente"}>Nombre del cliente</MenuItem>
             </Select>
           </FormControl>
           <TextField
