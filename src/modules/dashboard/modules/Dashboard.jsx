@@ -71,7 +71,9 @@ export default function Dashboard() {
     db.collection("orders").get().then(data => {
       let fireOrders = [];
       data.forEach(doc => {
-        fireOrders.push({id: doc.id, ...doc.data()});
+        if (!["Completado", "Cancelado", "Archivado"].includes(doc.data().status)) {
+          fireOrders.push({id: doc.id, ...doc.data()});
+        }
       })
       setOrders(fireOrders);
     })
